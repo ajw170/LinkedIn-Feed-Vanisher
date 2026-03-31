@@ -1,0 +1,9 @@
+﻿{
+  "compilerOptions": {
+    "checkJs": true,
+    "lib": ["ES2022", "DOM"],
+    "types": ["firefox-webext-browser"]
+  },
+  "include": ["**/*.js"]
+}
+
