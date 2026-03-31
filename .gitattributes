@@ -1,0 +1,14 @@
+﻿# Normalize text files and store LF in git
+* text=auto eol=lf
+
+# Windows script files keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Common binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+

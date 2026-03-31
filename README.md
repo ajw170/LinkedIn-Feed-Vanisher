@@ -10,11 +10,16 @@
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-a855f7?style=for-the-badge)](https://github.com/ajw170/LinkedIn-Feed-Vanisher/pulls)
 
+## I don't care about the technical details, just let me install the extension!
+
+---
+- **Firefox Add-ons (AMO):** https://addons.mozilla.org/firefox/search/?q=LinkedIn%20Feed%20Vanisher
+- **Chrome Web Store:** https://chromewebstore.google.com/search/LinkedIn%20Feed%20Vanisher
 ---
 
 ## 🎭 What Does It Do?
 
-LinkedIn is a fantastic networking tool — but that **infinite scrolling news feed** is a productivity black hole. Endless posts, humble-brags, and "thought leadership" can derail your entire afternoon.
+LinkedIn is a fantastic networking tool — but that **infinite scrolling news feed** is a productivity black hole. Endless posts, humble-brags, and AI-generated "thought leadership" can derail your entire afternoon.
 
 **LinkedIn Feed Vanisher** is a lightweight browser extension that makes the feed _disappear_ with a single click. Use LinkedIn for what it's actually good for — messaging, jobs, profiles — without the distraction of the feed.
 
@@ -27,11 +32,10 @@ LinkedIn is a fantastic networking tool — but that **infinite scrolling news f
 
 ### ✨ Features
 
-- 🚫 **Hides the LinkedIn news feed** on `linkedin.com/feed/`
+- 🚫 **Hides the LinkedIn news feed** on `linkedin.com/feed/` and the home page
 - 🔘 **One-click toggle** via the browser toolbar popup
 - 💾 **Remembers your preference** — feed stays hidden across page reloads
 - 🟣 **Badge indicator** on the toolbar icon shows active/inactive state
-- ⚡ **Zero performance overhead** — uses CSS injection, not DOM polling
 - 🦊 **Firefox** (Manifest V2) and 🟡 **Chrome/Chromium** (Manifest V3) supported
 
 ---

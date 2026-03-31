@@ -1,0 +1,22 @@
+{
+  "name": "linkedin-feed-vanisher",
+  "version": "1.0.0",
+  "description": "Removes the LinkedIn news feed for maximum focus.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajw170/LinkedIn-Feed-Vanisher.git"
+  },
+  "author": "Andrew Wood",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajw170/LinkedIn-Feed-Vanisher/issues"
+  },
+  "homepage": "https://github.com/ajw170/LinkedIn-Feed-Vanisher#readme",
+  "devDependencies": {
+    "@types/chrome": "^0.1.24",
+    "@types/firefox-webext-browser": "^120.0.4"
+  }
+}
