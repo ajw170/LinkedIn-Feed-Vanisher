@@ -1,3 +1,6 @@
+> [!WARNING]
+> **Work in progress:** This project is under active development and **not final**. Features, behavior, and instructions may change without notice.
+> 
 # 🌀 LinkedIn Feed Vanisher
 
 > **Say goodbye to the LinkedIn noise. Hello, focus.** ✨
