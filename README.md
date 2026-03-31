@@ -103,7 +103,7 @@ The Chrome and Firefox folders are **fully self-contained** — each can be load
 4. Navigate to the **`firefox/`** folder and select **`manifest.json`**
 5. The 🌀 icon will appear in your toolbar!
 
-#### Option B — Permanent load via `web-ext`
+#### Option B — Temporary dev profile via `web-ext`
 
 1. Install `web-ext`:
    ```bash
@@ -138,13 +138,33 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 3. **Edit files** in `chrome/` or `firefox/` depending on your target browser.
 
 4. **Live-reload during development:**
+
+   **Option A — Firefox (recommended): auto-reload via `web-ext`**
+   ```bash
+   npm install -g web-ext
+   cd firefox
+   web-ext run --watch
+   ```
+
+   **Option B — Chrome / Chromium (recommended): auto-reload via `web-ext`**
+
+   `web-ext` can also launch Chromium-based browsers. Use the Chrome/Chromium build (Manifest V3) and target Chromium:
+   ```bash
+   npm install -g web-ext
+   cd chrome
+   web-ext run --target=chromium --watch
+   ```
+
+   Notes:
+   - If `web-ext` can't find your browser automatically, pass an explicit binary path:
+     - macOS: `--chromium-binary="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"`
+     - Linux (examples): `--chromium-binary=google-chrome` or `--chromium-binary=chromium`
+     - Windows (examples): `--chromium-binary="C:\Program Files\Google\Chrome\Application\chrome.exe"`
+   - If you prefer to use your existing profile instead of a temporary one, you can still do manual reloads in `chrome://extensions/`.
+
+   **Option C — Manual reload (works everywhere)**
    - **Chrome:** After editing, go to `chrome://extensions/` and click the 🔄 refresh button on the extension card.
-   - **Firefox with `web-ext`:** Run `web-ext run` in the `firefox/` directory — it auto-reloads on file changes:
-     ```bash
-     npm install -g web-ext
-     cd firefox
-     web-ext run --watch
-     ```
+   - **Firefox (Temporary Add-on / about:debugging):** Click **Reload** on the extension entry.
 
 5. **Inspect the popup:**
    - Right-click the extension toolbar icon → **"Inspect Popup"** (Chrome) or **"Inspect"** (Firefox)
@@ -159,7 +179,7 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
 1. Open the project folder: **File → Open…**
 2. Mark `chrome/` and `firefox/` as source roots if needed
-3. Use the built-in terminal to run `web-ext run --watch` for Firefox live-reload
+3. Use the built-in terminal to run `web-ext run --watch` (Firefox) or `web-ext run --target=chromium --watch` (Chromium)
 
 ---
 
@@ -225,4 +245,3 @@ MIT © [LinkedIn Feed Vanisher Contributors](https://github.com/ajw170/LinkedIn-
 ---
 
 <p align="center">Made with 💜 to help you stay focused</p>
-
