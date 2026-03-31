@@ -20,7 +20,8 @@ LinkedIn is a fantastic networking tool — but that **infinite scrolling news f
 
 | Before 😩 | After 🎉 |
 |---|---|
-| Endless scrolling feed eating your time | Clean LinkedIn with no feed in sight |
+| AI-generated garbage | Clean Slate |
+| Endless scrolling | Pure Focus |
 | Notifications pulling you back in | You're in control of your attention |
 | "Just one more post…" | Get in, do your thing, get out |
 
