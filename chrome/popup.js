@@ -37,7 +37,7 @@ function applyAndSave(vanished) {
   updateUI(vanished);
 }
 
-// Initialise the popup with the persisted state.
+// Initialize the popup with the persisted state.
 chrome.storage.local.get([STORAGE_KEY], (result) => {
   const vanished = result[STORAGE_KEY] !== false;
   updateUI(vanished);
