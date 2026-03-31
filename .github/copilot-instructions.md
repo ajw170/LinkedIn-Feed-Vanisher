@@ -1,5 +1,7 @@
 ﻿# Copilot Instructions
 
+When running commands in the terminal, only use BASH commands.  Do not use Windows PowerShell commands.  /c/ referes to C:\ in BASH.  For example, to change to the C:\ directory, use `cd /c/` instead of `cd C:\`.
+
 This repository contains two self-contained browser extension implementations: `chrome/` and `firefox/`.
 
 When making functional changes, keep behavior aligned across both folders unless the difference is browser-specific.
