@@ -6,6 +6,7 @@
   "permissions": [
     "storage",
     "activeTab",
+    "tabs",
     "https://www.linkedin.com/*"
   ],
   "background": {
@@ -22,9 +23,9 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/icon16-dim.png",
+      "48": "icons/icon48-dim.png",
+      "128": "icons/icon128-dim.png"
     },
     "default_title": "LinkedIn Feed Vanisher"
   },

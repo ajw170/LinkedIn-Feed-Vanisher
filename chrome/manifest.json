@@ -5,7 +5,8 @@
   "description": "Make your LinkedIn feed vanish! Hide the noise and stay focused on what matters.",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "host_permissions": [
     "https://www.linkedin.com/*"
@@ -23,9 +24,9 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/icon16-dim.png",
+      "48": "icons/icon48-dim.png",
+      "128": "icons/icon128-dim.png"
     },
     "default_title": "LinkedIn Feed Vanisher"
   },
