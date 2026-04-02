@@ -5,17 +5,18 @@
 
 > **Say goodbye to the LinkedIn noise. Hello, focus.** ✨
 
-[![Chrome](https://img.shields.io/badge/Chrome-Extension-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white)](chrome/)
-[![Firefox](https://img.shields.io/badge/Firefox-Extension-FF7139?style=for-the-badge&logo=firefox-browser&logoColor=white)](firefox/)
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-a855f7?style=for-the-badge)](https://github.com/ajw170/LinkedIn-Feed-Vanisher/pulls)
 
-## I don't care about the technical details, just let me install the extension!
+## 🚀 I don't care about the technical details, just let me install the extension!
 
----
-- **Firefox Add-ons (AMO):** https://addons.mozilla.org/firefox/search/?q=LinkedIn%20Feed%20Vanisher
-- **Chrome Web Store:** https://chromewebstore.google.com/search/LinkedIn%20Feed%20Vanisher
----
+<div align="center">
+
+[![Firefox Add-ons](https://img.shields.io/badge/Firefox_Add--ons-Get_it_here-FF7139?style=for-the-badge&logo=firefox-browser&logoColor=white)](https://addons.mozilla.org/firefox/search/?q=LinkedIn%20Feed%20Vanisher)
+&nbsp;&nbsp;
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Get_it_here-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/search/LinkedIn%20Feed%20Vanisher)
+
+</div>
 
 ## 🎭 What Does It Do?
 
