@@ -1,4 +1,4 @@
-// LinkedIn Feed Vanisher — Content Script (Firefox)
+// LinkedIn Feed Vanisher — Content Script
 // Hides the LinkedIn news feed so you can browse without distraction.
 
 const STORAGE_KEY = 'feedVanished';
@@ -118,6 +118,8 @@ function applyState(vanished) {
     showFeed();
   }
 }
+
+// Firefox-specific: message listener and storage initialization.
 
 // Listen for messages from the popup or background script.
 browser.runtime.onMessage.addListener((message) => {

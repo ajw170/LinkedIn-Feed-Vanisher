@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "Removes the LinkedIn news feed for maximum focus.",
   "scripts": {
+    "sync": "node scripts/sync-content-shared.js",
+    "prefirefox": "npm run sync",
     "firefox": "web-ext run --source-dir=firefox --reload",
+    "prechrome": "npm run sync",
     "chrome": "web-ext run --source-dir=chrome --target=chromium --watch",
+    "prefirefox:run": "npm run sync",
     "firefox:run": "web-ext run --source-dir=firefox",
+    "prechrome:run": "npm run sync",
     "chrome:run": "web-ext run --source-dir=chrome --target=chromium"
   },
   "repository": {
