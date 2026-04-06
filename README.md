@@ -45,32 +45,58 @@ LinkedIn is a fantastic networking tool — but that **infinite scrolling news f
 
 ```
 LinkedIn-Feed-Vanisher/
-├── chrome/                  # Chrome / Chromium extension (Manifest V3)
-│   ├── manifest.json        # Extension manifest
-│   ├── content.js           # Content script — hides the feed
-│   ├── background.js        # Service worker — badge updates
-│   ├── popup.html           # Toolbar popup UI
-│   ├── popup.js             # Popup logic
-│   └── icons/               # Extension icons (PNG)
-│       ├── icon16.png
-│       ├── icon48.png
-│       └── icon128.png
+├── shared/                        # Shared source files (browser-agnostic)
+│   ├── content.shared.js          # Shared content-script logic
+│   ├── popup.shared.js            # Shared popup constants + UI helpers
+│   ├── background.shared.js       # Shared background constants + helpers
+│   ├── popup.html                 # Popup HTML (identical for all browsers)
+│   └── icons/                     # Extension icons (PNG, identical for all browsers)
+│       ├── icon16.png / icon16-dim.png
+│       ├── icon48.png / icon48-dim.png
+│       └── icon128.png / icon128-dim.png
 │
-├── firefox/                 # Firefox extension (Manifest V2)
-│   ├── manifest.json        # Extension manifest
-│   ├── content.js           # Content script — hides the feed
-│   ├── background.js        # Background script — badge updates
-│   ├── popup.html           # Toolbar popup UI
-│   ├── popup.js             # Popup logic
-│   └── icons/               # Extension icons (PNG)
-│       ├── icon16.png
-│       ├── icon48.png
-│       └── icon128.png
+├── chrome/                        # Chrome / Chromium extension (Manifest V3)
+│   ├── manifest.json              # Extension manifest (unique)
+│   ├── jsconfig.json              # TypeScript/JS config (unique)
+│   ├── content.chrome.js          # Chrome-specific content-script additions
+│   ├── popup.chrome.js            # Chrome-specific popup additions
+│   ├── background.chrome.js       # Chrome-specific background additions
+│   │── content.js                 # ⚙️ Generated — do not edit directly
+│   ├── popup.js                   # ⚙️ Generated — do not edit directly
+│   ├── background.js              # ⚙️ Generated — do not edit directly
+│   ├── popup.html                 # ⚙️ Generated — do not edit directly
+│   └── icons/                     # ⚙️ Generated — do not edit directly
+│
+├── firefox/                       # Firefox extension (Manifest V2)
+│   ├── manifest.json              # Extension manifest (unique)
+│   ├── jsconfig.json              # TypeScript/JS config (unique)
+│   ├── content.firefox.js         # Firefox-specific content-script additions
+│   ├── popup.firefox.js           # Firefox-specific popup additions
+│   ├── background.firefox.js      # Firefox-specific background additions
+│   ├── content.js                 # ⚙️ Generated — do not edit directly
+│   ├── popup.js                   # ⚙️ Generated — do not edit directly
+│   ├── background.js              # ⚙️ Generated — do not edit directly
+│   ├── popup.html                 # ⚙️ Generated — do not edit directly
+│   └── icons/                     # ⚙️ Generated — do not edit directly
+│
+├── scripts/
+│   └── sync-content-shared.js     # Generates browser-specific files from shared sources
 │
 └── README.md
 ```
 
-The Chrome and Firefox folders are **fully self-contained** — each can be loaded directly into the respective browser as an unpacked extension. Shared logic is intentionally kept consistent between the two, with browser-specific API calls (`chrome.*` vs `browser.*`) used where required.
+### How the shared/generated structure works
+
+Shared logic lives in `shared/`. Browser-specific code lives in `chrome/*.chrome.js` and `firefox/*.firefox.js` stub files. The sync script concatenates them into the complete extension files loaded by each browser.
+
+To regenerate after editing shared or stub files:
+```bash
+npm run sync
+```
+
+> **Note:** The generated files (`.js`, `.html`, `icons/` in each browser folder) are committed to the repository so the extension can be loaded directly without running the sync script first.
+
+The only files that require manual maintenance per-browser are `manifest.json`, `jsconfig.json`, and the `*.chrome.js` / `*.firefox.js` stubs.
 
 ---
 
@@ -136,10 +162,11 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
    | Command | Browser | Watch Mode | Purpose |
    |---------|---------|-----------|---------|
-   | `npm run firefox` | Firefox | ✅ Yes | Launch Firefox with live reload on file changes |
-   | `npm run chrome` | Chromium | ✅ Yes | Launch Chrome/Edge/Brave with live reload on file changes |
-   | `npm run firefox:run` | Firefox | ❌ No | One-time Firefox launch (no watch) |
-   | `npm run chrome:run` | Chromium | ❌ No | One-time Chromium launch (no watch) |
+   | `npm run sync` | — | — | Regenerate browser-specific files from shared sources (runs automatically before the commands below) |
+   | `npm run firefox` | Firefox | ✅ Yes | Sync + launch Firefox with live reload on file changes |
+   | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with live reload on file changes |
+   | `npm run firefox:run` | Firefox | ❌ No | Sync + one-time Firefox launch (no watch) |
+   | `npm run chrome:run` | Chromium | ❌ No | Sync + one-time Chromium launch (no watch) |
 
    **Example:**
    ```bash
@@ -200,7 +227,7 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
 ## 🔧 Customisation
 
-Want to hide (or show) additional LinkedIn elements? Open `content.js` in the relevant browser folder and add CSS selectors to the `FEED_SELECTORS` array:
+Want to hide (or show) additional LinkedIn elements? Open `shared/content.shared.js` and add CSS selectors to the `FEED_SELECTORS` array, then run `npm run sync` to regenerate the browser files:
 
 ```js
 const FEED_SELECTORS = [
@@ -226,7 +253,7 @@ Pull requests are welcome! 🎉
 4. Push the branch: `git push origin feature/my-awesome-feature`
 5. Open a Pull Request
 
-Please keep Chrome (`chrome/`) and Firefox (`firefox/`) implementations in sync when making functional changes.
+Please keep the shared sources (`shared/`) updated for logic that applies to both browsers. Only put browser-specific code in the `*.chrome.js` / `*.firefox.js` stubs. Run `npm run sync` after any changes to regenerate the browser-specific extension files.
 
 ---
 

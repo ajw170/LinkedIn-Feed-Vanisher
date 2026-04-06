@@ -4,6 +4,6 @@
     "lib": ["ES2022", "DOM"],
     "types": ["firefox-webext-browser"]
   },
-  "include": ["**/*.js"]
+  "include": ["**/*.js", "../shared/**/*.js"]
 }
 
