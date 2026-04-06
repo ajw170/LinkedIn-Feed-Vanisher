@@ -100,28 +100,11 @@ The Chrome and Firefox folders are **fully self-contained** — each can be load
    git clone https://github.com/ajw170/LinkedIn-Feed-Vanisher.git
    ```
 
-#### Option A — Temporary load (no restart required, resets on browser restart)
-
-1. Open Firefox and go to `about:debugging`
-2. Click **"This Firefox"** in the left sidebar
-3. Click **"Load Temporary Add-on…"**
-4. Navigate to the **`firefox/`** folder and select **`manifest.json`**
-5. The 🌀 icon will appear in your toolbar!
-
-#### Option B — Temporary dev profile via `web-ext`
-
-1. Install `web-ext`:
-   ```bash
-   npm install -g web-ext
-   ```
-2. Run from the `firefox/` directory:
-   ```bash
-   cd firefox
-   web-ext run
-   ```
-   This launches a temporary Firefox instance with the extension pre-loaded.
-
----
+2. Open Firefox and go to `about:debugging`
+3. Click **"This Firefox"** in the left sidebar
+4. Click **"Load Temporary Add-on…"**
+5. Navigate to the **`firefox/`** folder and select **`manifest.json`**
+6. The 🌀 icon will appear in your toolbar!
 
 ## 🖥️ Running & Editing in an IDE
 
