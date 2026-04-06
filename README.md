@@ -162,11 +162,11 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
    | Command | Browser | Watch Mode | Purpose |
    |---------|---------|-----------|---------|
-   | `npm run sync` | — | — | Regenerate browser-specific files from shared sources |
-   | `npm run firefox` | Firefox | ✅ Yes | Launch Firefox with live reload on file changes |
-   | `npm run chrome` | Chromium | ✅ Yes | Launch Chrome/Edge/Brave with live reload on file changes |
-   | `npm run firefox:run` | Firefox | ❌ No | One-time Firefox launch (no watch) |
-   | `npm run chrome:run` | Chromium | ❌ No | One-time Chromium launch (no watch) |
+   | `npm run sync` | — | — | Regenerate browser-specific files from shared sources (runs automatically before the commands below) |
+   | `npm run firefox` | Firefox | ✅ Yes | Sync + launch Firefox with live reload on file changes |
+   | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with live reload on file changes |
+   | `npm run firefox:run` | Firefox | ❌ No | Sync + one-time Firefox launch (no watch) |
+   | `npm run chrome:run` | Chromium | ❌ No | Sync + one-time Chromium launch (no watch) |
 
    **Example:**
    ```bash
