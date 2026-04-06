@@ -13,3 +13,5 @@ Key files to review before changing behavior: `chrome/content.js`, `chrome/popup
 Answer as succinctly as possible.
 
 If changes invalidate the assumptions in the instructions file, update the instructions file to refect the new behavior.
+
+Update the README.md file to reflect any changes in behavior or installation instructions.  This can include instructions to run the app in a certain way.  If the README.md file is not up to date, update it to reflect the current state of the project.

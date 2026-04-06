@@ -127,32 +127,36 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
 4. **Live-reload during development:**
 
-   **Option A — Firefox (recommended): auto-reload via `web-ext`**
+   First, install dependencies (one-time):
    ```bash
-   npm install -g web-ext
-   cd firefox
-   web-ext run --watch
+   npm install
    ```
 
-   **Option B — Chrome / Chromium (recommended): auto-reload via `web-ext`**
+   Then use one of these npm scripts:
 
-   `web-ext` can also launch Chromium-based browsers. Use the Chrome/Chromium build (Manifest V3) and target Chromium:
+   | Command | Browser | Watch Mode | Purpose |
+   |---------|---------|-----------|---------|
+   | `npm run firefox` | Firefox | ✅ Yes | Launch Firefox with live reload on file changes |
+   | `npm run chrome` | Chromium | ✅ Yes | Launch Chrome/Edge/Brave with live reload on file changes |
+   | `npm run firefox:run` | Firefox | ❌ No | One-time Firefox launch (no watch) |
+   | `npm run chrome:run` | Chromium | ❌ No | One-time Chromium launch (no watch) |
+
+   **Example:**
    ```bash
-   npm install -g web-ext
-   cd chrome
-   web-ext run --target=chromium --watch
+   npm run firefox    # Launches Firefox with auto-reload enabled
+   npm run chrome     # Launches Chrome with auto-reload enabled
    ```
 
-   Notes:
-   - If `web-ext` can't find your browser automatically, pass an explicit binary path:
-     - macOS: `--chromium-binary="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"`
-     - Linux (examples): `--chromium-binary=google-chrome` or `--chromium-binary=chromium`
-     - Windows (examples): `--chromium-binary="C:\Program Files\Google\Chrome\Application\chrome.exe"`
-   - If you prefer to use your existing profile instead of a temporary one, you can still do manual reloads in `chrome://extensions/`.
+   **Notes:**
+   - Watch mode is recommended for development — any file changes automatically reload the extension in the browser.
+   - If `web-ext` can't find your browser automatically, you can pass an explicit binary path. See the [web-ext documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/#web-ext-run) for details.
+   - If you prefer to use your existing profile instead of a temporary one, you can still do manual reloads:
+     - **Chrome:** Go to `chrome://extensions/` and click the 🔄 refresh button on the extension card.
+     - **Firefox:** Go to `about:debugging` and click **Reload** on the extension entry.
 
-   **Option C — Manual reload (works everywhere)**
+   **Manual reload (works everywhere)**
    - **Chrome:** After editing, go to `chrome://extensions/` and click the 🔄 refresh button on the extension card.
-   - **Firefox (Temporary Add-on / about:debugging):** Click **Reload** on the extension entry.
+   - **Firefox (about:debugging):** Click **Reload** on the extension entry.
 
 5. **Inspect the popup:**
    - Right-click the extension toolbar icon → **"Inspect Popup"** (Chrome) or **"Inspect"** (Firefox)

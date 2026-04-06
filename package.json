@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Removes the LinkedIn news feed for maximum focus.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "firefox": "web-ext run --source-dir=firefox --reload",
+    "chrome": "web-ext run --source-dir=chrome --target=chromium --watch",
+    "firefox:run": "web-ext run --source-dir=firefox",
+    "chrome:run": "web-ext run --source-dir=chrome --target=chromium"
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,7 @@
   "homepage": "https://github.com/ajw170/LinkedIn-Feed-Vanisher#readme",
   "devDependencies": {
     "@types/chrome": "^0.1.24",
-    "@types/firefox-webext-browser": "^120.0.4"
+    "@types/firefox-webext-browser": "^120.0.4",
+    "web-ext": "^7.12.0"
   }
 }
