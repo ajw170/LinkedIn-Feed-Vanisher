@@ -4,6 +4,24 @@
 const STORAGE_KEY = 'feedVanished';
 const PLACEHOLDER_ID = 'lfv-tranquility-placeholder';
 const LEGACY_STYLE_ID = 'lfv-hide-style';
+const PLACEHOLDER_STYLE_ID = 'lfv-placeholder-style';
+
+// CSS injected into the host page to style the feed placeholder.
+// Colors mirror the LinkedIn-palette values defined in shared/popup.css.
+const PLACEHOLDER_CSS = `
+#lfv-tranquility-placeholder {
+  margin: 24px 0;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0A66C2;
+  background: #EAF4FF;
+  border: 1px solid #C0D9F0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+`.trim();
 
 // CSS selectors targeting the LinkedIn feed container and related elements.
 // LinkedIn periodically updates its DOM, so multiple selectors are provided
@@ -49,22 +67,23 @@ function findFeedElement() {
   return null;
 }
 
+function injectPlaceholderStyle() {
+  if (document.getElementById(PLACEHOLDER_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = PLACEHOLDER_STYLE_ID;
+  style.textContent = PLACEHOLDER_CSS;
+  document.head.appendChild(style);
+}
+
+function removePlaceholderStyle() {
+  const style = document.getElementById(PLACEHOLDER_STYLE_ID);
+  if (style) style.remove();
+}
+
 function createPlaceholder() {
   const placeholder = document.createElement('div');
   placeholder.id = PLACEHOLDER_ID;
   placeholder.textContent = 'Enjoy the calm without the feed!';
-  placeholder.style.cssText = [
-    'margin: 24px 0',
-    'padding: 20px',
-    'border-radius: 8px',
-    'text-align: center',
-    'font-size: 15px',
-    'font-weight: 600',
-    'color: #0A66C2',
-    'background: #EAF4FF',
-    'border: 1px solid #C0D9F0',
-    'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  ].join(';');
   return placeholder;
 }
 
@@ -83,6 +102,7 @@ function hideFeed() {
   removedFeed = { node: feed, parent, nextSibling };
   parent.removeChild(feed);
 
+  injectPlaceholderStyle();
   const placeholder = createPlaceholder();
   if (nextSibling && nextSibling.parentNode === parent) {
     parent.insertBefore(placeholder, nextSibling);
@@ -106,6 +126,7 @@ function showFeed() {
   }
 
   if (placeholder) placeholder.remove();
+  removePlaceholderStyle();
 }
 
 /** Apply vanished/visible state. */

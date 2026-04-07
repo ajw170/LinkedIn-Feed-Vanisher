@@ -108,7 +108,7 @@ The popup consists of four regions:
 
 ### Content-Script Placeholder (`shared/content.shared.js`)
 
-When the feed is hidden, a plain `<div>` placeholder is injected using inline styles (no external stylesheet, since content scripts run in the LinkedIn page context). The placeholder uses colors that match the active palette:
+When the feed is hidden, a `<style>` tag is injected into the host page's `<head>` (identified by `PLACEHOLDER_STYLE_ID = 'lfv-placeholder-style'`), and a plain `<div>` with `id="lfv-tranquility-placeholder"` is inserted in place of the feed. No inline styles are used on the element itself — all styling is controlled by the injected stylesheet. The colors match the active palette:
 
 | Property | Value |
 |---|---|
@@ -117,6 +117,8 @@ When the feed is hidden, a plain `<div>` placeholder is injected using inline st
 | Text color | `#0A66C2` (`--color-primary`) |
 | Border radius | `8px` |
 | Font | Same font stack as popup |
+
+The injected `<style>` tag is removed when the feed is restored (`showFeed`).
 
 ### Toolbar Badge (`chrome/background.chrome.js`, `firefox/background.firefox.js`)
 
