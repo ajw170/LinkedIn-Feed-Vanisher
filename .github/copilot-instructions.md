@@ -4,9 +4,11 @@ When running commands in the terminal, only use BASH commands.  Do not use Windo
 
 This repository contains two browser extension builds: `chrome/` and `firefox/`. Common logic lives in `shared/`; browser-specific additions live in `*.chrome.js` / `*.firefox.js` stubs inside each browser folder. The script `scripts/sync-content-shared.js` (run via `npm run sync`) assembles the complete extension files.
 
-When making functional changes, edit the shared sources in `shared/` (for common logic) or the browser-specific stubs (for browser-specific code), then run `npm run sync` to regenerate the extension files. Do **not** edit the generated files (`content.js`, `popup.js`, `background.js`, `popup.html`, `icons/`) inside the browser folders directly.
+When making functional changes, edit the shared sources in `shared/` (for common logic) or the browser-specific stubs (for browser-specific code), then run `npm run sync` to regenerate the extension files. Do **not** edit the generated files (`content.js`, `popup.js`, `background.js`, `popup.html`, `popup.css`, `icons/`) inside the browser folders directly.
 
 Key files to review before changing behavior: `shared/content.shared.js`, `shared/popup.shared.js`, `shared/background.shared.js`, and the browser-specific stubs `chrome/content.chrome.js`, `firefox/content.firefox.js`, etc.
+
+**For any styling or color changes**, consult `DESIGN.md` first. It defines the full color palette, all CSS custom properties, typography, spacing, and component conventions. All popup colors are controlled via CSS custom properties in `shared/popup.css`. Badge colors in the background scripts must be kept in sync manually.
 
 Answer as succinctly as possible.
 

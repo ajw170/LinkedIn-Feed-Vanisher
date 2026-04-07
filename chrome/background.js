@@ -35,7 +35,7 @@ function isLinkedInUrl(url) {
 /** Update the action badge to reflect the current vanished state. */
 function updateBadge(vanished) {
   chrome.action.setBadgeText({ text: vanished ? '✓' : '' });
-  chrome.action.setBadgeBackgroundColor({ color: vanished ? '#8B5CF6' : '#6B7280' });
+  chrome.action.setBadgeBackgroundColor({ color: vanished ? '#0A66C2' : '#B0B0B0' });
 }
 
 function updateActionAppearance() {

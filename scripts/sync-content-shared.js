@@ -12,6 +12,7 @@
 //   shared/popup.shared.js        — shared popup logic
 //   shared/background.shared.js   — shared background constants + helpers
 //   shared/popup.html             — shared popup HTML (identical for all browsers)
+//   shared/popup.css              — shared popup stylesheet (identical for all browsers)
 //   shared/icons/                 — shared extension icons (identical for all browsers)
 //
 //   chrome/content.chrome.js      — Chrome-specific content-script additions
@@ -24,9 +25,9 @@
 //
 // Generated output (committed so the extension loads without running this script):
 //   chrome/content.js, chrome/popup.js, chrome/background.js
-//   chrome/popup.html, chrome/icons/
+//   chrome/popup.html, chrome/popup.css, chrome/icons/
 //   firefox/content.js, firefox/popup.js, firefox/background.js
-//   firefox/popup.html, firefox/icons/
+//   firefox/popup.html, firefox/popup.css, firefox/icons/
 
 'use strict';
 
@@ -86,6 +87,11 @@ function syncBrowser(browser) {
   const htmlSrc = path.join(SHARED_DIR, 'popup.html');
   const htmlDest = path.join(browserDir, 'popup.html');
   copyFile(htmlSrc, htmlDest);
+
+  // Copy popup.css from shared/.
+  const cssSrc = path.join(SHARED_DIR, 'popup.css');
+  const cssDest = path.join(browserDir, 'popup.css');
+  copyFile(cssSrc, cssDest);
 
   // Copy all icons from shared/icons/.
   const iconsDir = path.join(SHARED_DIR, 'icons');

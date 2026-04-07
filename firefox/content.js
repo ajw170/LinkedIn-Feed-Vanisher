@@ -56,13 +56,14 @@ function createPlaceholder() {
   placeholder.style.cssText = [
     'margin: 24px 0',
     'padding: 20px',
-    'border-radius: 12px',
+    'border-radius: 8px',
     'text-align: center',
-    'font-size: 20px',
+    'font-size: 15px',
     'font-weight: 600',
-    'color: #5e2ca5',
-    'background: #f5f0ff',
-    'border: 1px solid #e2d4ff',
+    'color: #0A66C2',
+    'background: #EAF4FF',
+    'border: 1px solid #C0D9F0',
+    'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   ].join(';');
   return placeholder;
 }
