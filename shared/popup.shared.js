@@ -13,9 +13,9 @@ function updateUI(vanished) {
 
   if (vanished) {
     statusBadge.className = 'status-badge vanished';
-    statusText.textContent = 'Feed is vanished 🎉';
+    statusText.textContent = 'Feed is hidden';
   } else {
     statusBadge.className = 'status-badge visible';
-    statusText.textContent = 'Feed is visible 👀';
+    statusText.textContent = 'Feed is visible';
   }
 }

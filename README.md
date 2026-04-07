@@ -36,7 +36,7 @@ LinkedIn is a fantastic networking tool — but that **infinite scrolling news f
 - 🚫 **Hides the LinkedIn news feed** on `linkedin.com/feed/` and the home page
 - 🔘 **One-click toggle** via the browser toolbar popup
 - 💾 **Remembers your preference** — feed stays hidden across page reloads
-- 🟣 **Badge indicator** on the toolbar icon shows active/inactive state
+- 🔵 **Badge indicator** on the toolbar icon shows active/inactive state
 - 🦊 **Firefox** (Manifest V2) and 🟡 **Chrome/Chromium** (Manifest V3) supported
 
 ---
@@ -50,6 +50,7 @@ LinkedIn-Feed-Vanisher/
 │   ├── popup.shared.js            # Shared popup constants + UI helpers
 │   ├── background.shared.js       # Shared background constants + helpers
 │   ├── popup.html                 # Popup HTML (identical for all browsers)
+│   ├── popup.css                  # Popup stylesheet — single source for all colors/styles
 │   └── icons/                     # Extension icons (PNG, identical for all browsers)
 │       ├── icon16.png / icon16-dim.png
 │       ├── icon48.png / icon48-dim.png
@@ -65,6 +66,7 @@ LinkedIn-Feed-Vanisher/
 │   ├── popup.js                   # ⚙️ Generated — do not edit directly
 │   ├── background.js              # ⚙️ Generated — do not edit directly
 │   ├── popup.html                 # ⚙️ Generated — do not edit directly
+│   ├── popup.css                  # ⚙️ Generated — do not edit directly
 │   └── icons/                     # ⚙️ Generated — do not edit directly
 │
 ├── firefox/                       # Firefox extension (Manifest V2)
@@ -77,11 +79,13 @@ LinkedIn-Feed-Vanisher/
 │   ├── popup.js                   # ⚙️ Generated — do not edit directly
 │   ├── background.js              # ⚙️ Generated — do not edit directly
 │   ├── popup.html                 # ⚙️ Generated — do not edit directly
+│   ├── popup.css                  # ⚙️ Generated — do not edit directly
 │   └── icons/                     # ⚙️ Generated — do not edit directly
 │
 ├── scripts/
 │   └── sync-content-shared.js     # Generates browser-specific files from shared sources
 │
+├── DESIGN.md                      # Color palette, styling conventions, and design system
 └── README.md
 ```
 
@@ -89,12 +93,14 @@ LinkedIn-Feed-Vanisher/
 
 Shared logic lives in `shared/`. Browser-specific code lives in `chrome/*.chrome.js` and `firefox/*.firefox.js` stub files. The sync script concatenates them into the complete extension files loaded by each browser.
 
+**Styling** is controlled entirely by `shared/popup.css`, which uses CSS custom properties so that every color can be changed from a single place. See [DESIGN.md](DESIGN.md) for the full color palette and styling conventions.
+
 To regenerate after editing shared or stub files:
 ```bash
 npm run sync
 ```
 
-> **Note:** The generated files (`.js`, `.html`, `icons/` in each browser folder) are committed to the repository so the extension can be loaded directly without running the sync script first.
+> **Note:** The generated files (`.js`, `.html`, `.css`, `icons/` in each browser folder) are committed to the repository so the extension can be loaded directly without running the sync script first.
 
 The only files that require manual maintenance per-browser are `manifest.json`, `jsconfig.json`, and the `*.chrome.js` / `*.firefox.js` stubs.
 
@@ -254,6 +260,8 @@ Pull requests are welcome! 🎉
 5. Open a Pull Request
 
 Please keep the shared sources (`shared/`) updated for logic that applies to both browsers. Only put browser-specific code in the `*.chrome.js` / `*.firefox.js` stubs. Run `npm run sync` after any changes to regenerate the browser-specific extension files.
+
+For styling changes, consult [DESIGN.md](DESIGN.md) and update the CSS custom properties in `shared/popup.css` rather than adding hard-coded color values.
 
 ---
 

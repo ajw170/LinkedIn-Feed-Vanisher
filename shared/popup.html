@@ -4,208 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LinkedIn Feed Vanisher</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      width: 300px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
-      color: #f5f3ff;
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      padding: 18px 20px 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid rgba(167, 139, 250, 0.25);
-    }
-
-    .logo {
-      font-size: 26px;
-      line-height: 1;
-    }
-
-    .header-text h1 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #c4b5fd;
-      letter-spacing: 0.4px;
-    }
-
-    .header-text p {
-      font-size: 11px;
-      color: #a78bfa;
-      margin-top: 1px;
-    }
-
-    main {
-      padding: 18px 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
-
-    .toggle-label {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .toggle-label span:first-child {
-      font-size: 13px;
-      font-weight: 600;
-      color: #ede9fe;
-    }
-
-    .toggle-label span:last-child {
-      font-size: 11px;
-      color: #a78bfa;
-    }
-
-    /* Toggle switch */
-    .switch {
-      position: relative;
-      width: 48px;
-      height: 26px;
-      flex-shrink: 0;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background: #4b5563;
-      border-radius: 26px;
-      transition: background 0.25s ease;
-    }
-
-    .slider::before {
-      content: '';
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      left: 3px;
-      top: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.25s ease;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-    }
-
-    .switch input:checked + .slider {
-      background: linear-gradient(135deg, #8b5cf6, #6366f1);
-    }
-
-    .switch input:checked + .slider::before {
-      transform: translateX(22px);
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      transition: all 0.25s ease;
-      align-self: flex-start;
-    }
-
-    .status-badge.vanished {
-      background: rgba(139, 92, 246, 0.2);
-      border: 1px solid rgba(139, 92, 246, 0.5);
-      color: #c4b5fd;
-    }
-
-    .status-badge.visible {
-      background: rgba(107, 114, 128, 0.2);
-      border: 1px solid rgba(107, 114, 128, 0.4);
-      color: #9ca3af;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .status-badge.vanished .dot {
-      background: #a78bfa;
-      box-shadow: 0 0 6px #a78bfa;
-      animation: pulse 2s infinite;
-    }
-
-    .status-badge.visible .dot {
-      background: #6b7280;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    footer {
-      padding: 10px 20px;
-      border-top: 1px solid rgba(167, 139, 250, 0.15);
-      display: flex;
-      justify-content: center;
-    }
-
-    footer a {
-      font-size: 10px;
-      color: #7c3aed;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    footer a:hover {
-      color: #a78bfa;
-    }
-  </style>
+  <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
   <header>
-    <div class="logo">🌀</div>
+    <div class="logo">🚫</div>
     <div class="header-text">
       <h1>LinkedIn Feed Vanisher</h1>
-      <p>Reclaim your focus ✨</p>
+      <p>Stay focused on what matters</p>
     </div>
   </header>
 
   <main>
     <div class="toggle-row">
       <div class="toggle-label">
-        <span>Vanish the feed</span>
-        <span>Hide LinkedIn's news feed</span>
+        <span>Hide the feed</span>
+        <span>Remove LinkedIn's news feed</span>
       </div>
       <label class="switch" aria-label="Toggle feed visibility">
         <input type="checkbox" id="toggle" />
@@ -215,7 +29,7 @@
 
     <div class="status-badge vanished" id="statusBadge">
       <div class="dot"></div>
-      <span id="statusText">Feed is vanished 🎉</span>
+      <span id="statusText">Feed is hidden</span>
     </div>
   </main>
 

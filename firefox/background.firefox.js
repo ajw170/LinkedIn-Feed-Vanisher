@@ -3,7 +3,7 @@
 /** Update the action badge to reflect the current vanished state. */
 function updateBadge(vanished) {
   browser.browserAction.setBadgeText({ text: vanished ? '✓' : '' });
-  browser.browserAction.setBadgeBackgroundColor({ color: vanished ? '#8B5CF6' : '#6B7280' });
+  browser.browserAction.setBadgeBackgroundColor({ color: vanished ? '#0A66C2' : '#B0B0B0' });
 }
 
 async function updateActionAppearance() {
