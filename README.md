@@ -172,10 +172,10 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
    | Command | Browser | Watch Mode | Purpose |
    |---------|---------|-----------|---------|
    | `npm run sync` | — | — | Regenerate browser-specific files from shared sources (runs automatically before the commands below) |
-   | `npm run firefox` | Firefox | ✅ Yes | Sync + launch Firefox with live reload on file changes |
-   | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with live reload on file changes |
-   | `npm run firefox:run` | Firefox | ❌ No | Sync + one-time Firefox launch (no watch) |
-   | `npm run chrome:run` | Chromium | ❌ No | Sync + one-time Chromium launch (no watch) |
+   | `npm run firefox` | Firefox | ✅ Yes | Sync + launch Firefox with default auto-reload behavior |
+   | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with default auto-reload behavior |
+   | `npm run firefox:run` | Firefox | ❌ No | Sync + one-time Firefox launch (`--no-reload`) |
+   | `npm run chrome:run` | Chromium | ❌ No | Sync + one-time Chromium launch (`--no-reload`) |
 
    **Example:**
    ```bash
@@ -184,7 +184,8 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
    ```
 
    **Notes:**
-   - Watch mode is recommended for development — any file changes automatically reload the extension in the browser.
+   - Auto-reload is enabled by default for `npm run firefox` and `npm run chrome`.
+   - Use `npm run firefox:run` / `npm run chrome:run` when you want one-time launch without reload.
    - If `web-ext` can't find your browser automatically, you can pass an explicit binary path. See the [web-ext documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/#web-ext-run) for details.
    - If you prefer to use your existing profile instead of a temporary one, you can still do manual reloads:
      - **Chrome:** Go to `chrome://extensions/` and click the 🔄 refresh button on the extension card.
@@ -207,7 +208,7 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
 1. Open the project folder: **File → Open…**
 2. Mark `chrome/` and `firefox/` as source roots if needed
-3. Use the built-in terminal to run `web-ext run --watch` (Firefox) or `web-ext run --target=chromium --watch` (Chromium)
+3. Use the built-in terminal to run `npm run firefox` (Firefox auto-reload), `npm run chrome` (Chromium auto-reload), or the `:run` variants for one-time launch.
 
 ---
 

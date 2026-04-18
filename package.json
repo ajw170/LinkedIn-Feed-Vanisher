@@ -5,13 +5,13 @@
   "scripts": {
     "sync": "node scripts/sync-content-shared.js",
     "prefirefox": "npm run sync",
-    "firefox": "web-ext run --source-dir=firefox --reload",
+    "firefox": "web-ext run --source-dir=firefox",
     "prechrome": "npm run sync",
-    "chrome": "web-ext run --source-dir=chrome --target=chromium --watch",
+    "chrome": "web-ext run --source-dir=chrome --target chromium",
     "prefirefox:run": "npm run sync",
-    "firefox:run": "web-ext run --source-dir=firefox",
+    "firefox:run": "web-ext run --source-dir=firefox  --no-reload",
     "prechrome:run": "npm run sync",
-    "chrome:run": "web-ext run --source-dir=chrome --target=chromium"
+    "chrome:run": "web-ext run --source-dir=chrome --target chromium  --no-reload"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,6 @@
   "devDependencies": {
     "@types/chrome": "^0.1.24",
     "@types/firefox-webext-browser": "^120.0.4",
-    "web-ext": "^7.12.0"
+    "web-ext": "^10.1.0"
   }
 }
