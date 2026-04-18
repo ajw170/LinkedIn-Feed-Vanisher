@@ -8,6 +8,8 @@
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-a855f7?style=for-the-badge)](https://github.com/ajw170/LinkedIn-Feed-Vanisher/pulls)
 
+<a href="https://www.buymeacoffee.com/codevision" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me a Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ## 🚀 I don't care about the technical details, just let me install the extension!
 
 <div align="center">
