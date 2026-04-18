@@ -8,10 +8,6 @@
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-a855f7?style=for-the-badge)](https://github.com/ajw170/LinkedIn-Feed-Vanisher/pulls)
 
-## 💗 Support
-
-<a href="https://www.buymeacoffee.com/codevision" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me a Coffee" style="height: 50px !important;width: 180px !important;" ></a>
-
 ## 🚀 I don't care about the technical details, just let me install the extension!
 
 <div align="center">
@@ -21,6 +17,9 @@
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Get_it_here-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/search/LinkedIn%20Feed%20Vanisher)
 
 </div>
+
+## 💗 Support
+<a href="https://www.buymeacoffee.com/codevision" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me a Coffee" style="height: 50px !important;width: 180px !important;" ></a>
 
 ## 🎭 What Does It Do?
 
