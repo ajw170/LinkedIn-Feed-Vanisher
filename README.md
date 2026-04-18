@@ -10,7 +10,7 @@
 
 ## 🚀 I don't care about the technical details, just let me install the extension!
 
-<div align="center">
+<div>
 
 [![Firefox Add-ons](https://img.shields.io/badge/Firefox_Add--ons-Get_it_here-FF7139?style=for-the-badge&logo=firefox-browser&logoColor=white)](https://addons.mozilla.org/firefox/search/?q=LinkedIn%20Feed%20Vanisher)
 &nbsp;&nbsp;
