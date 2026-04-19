@@ -11,7 +11,12 @@
     "prefirefox:run": "npm run sync",
     "firefox:run": "web-ext run --source-dir=firefox  --no-reload",
     "prechrome:run": "npm run sync",
-    "chrome:run": "web-ext run --source-dir=chrome --target chromium  --no-reload"
+    "chrome:run": "web-ext run --source-dir=chrome --target chromium  --no-reload",
+    "prebuild:firefox": "npm run sync",
+    "build:firefox": "web-ext build --source-dir=firefox --artifacts-dir=firefox --filename=linkedin-feed-vanisher-firefox.zip --overwrite-dest",
+    "prebuild:chrome": "npm run sync",
+    "build:chrome": "web-ext build --source-dir=chrome --artifacts-dir=chrome --filename=linkedin-feed-vanisher-chrome.zip --overwrite-dest",
+    "build:chromium": "npm run build:chrome"
   },
   "repository": {
     "type": "git",

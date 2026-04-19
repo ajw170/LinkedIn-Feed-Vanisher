@@ -176,11 +176,16 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
    | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with default auto-reload behavior |
    | `npm run firefox:run` | Firefox | ❌ No | Sync + one-time Firefox launch (`--no-reload`) |
    | `npm run chrome:run` | Chromium | ❌ No | Sync + one-time Chromium launch (`--no-reload`) |
+   | `npm run build:firefox` | Firefox | — | Sync + build package zip to `firefox/linkedin-feed-vanisher-firefox.zip` |
+   | `npm run build:chrome` | Chromium | — | Sync + build package zip to `chrome/linkedin-feed-vanisher-chrome.zip` |
+   | `npm run build:chromium` | Chromium | — | Alias of `npm run build:chrome` |
 
    **Example:**
    ```bash
    npm run firefox    # Launches Firefox with auto-reload enabled
    npm run chrome     # Launches Chrome with auto-reload enabled
+   npm run build:firefox
+   npm run build:chrome
    ```
 
    **Notes:**
