@@ -1,8 +1,8 @@
 # AGENTS.md
 
 ## What this repo is
-- This repository contains **two separate browser-extension builds** of the same product: `chrome/` for Chromium browsers and `firefox/` for Firefox.
-- Common logic lives in `shared/`; browser-specific code lives in `*.chrome.js` / `*.firefox.js` stubs inside each browser folder. A Node script (`scripts/sync-content-shared.js`) assembles the complete extension files.
+- This repository contains **two separate browser-extension builds** of the same product: `chrome.package/` for Chromium browsers and `firefox.package/` for Firefox.
+- Common logic lives in `shared/`; browser-specific source stubs live in `chrome_source/` and `firefox_source/`. A Node script (`scripts/sync-content-shared.js`) assembles the complete extension package files.
 - The main design choice is simplicity: the extension hides LinkedIn UI by **removing the feed node from the DOM and replacing it with a placeholder**, not by CSS injection or DOM polling.
 
 ## Architecture and message flow
@@ -19,19 +19,24 @@
 - `shared/popup.shared.js` — `STORAGE_KEY`, DOM element references, and `updateUI`.
 - `shared/background.shared.js` — `STORAGE_KEY`, `LINKEDIN_HOST`, `ICON_PATHS`, and `isLinkedInUrl`.
 - `shared/popup.html` and `shared/icons/` — identical assets for all browsers.
-- `chrome/content.chrome.js`, `chrome/popup.chrome.js`, `chrome/background.chrome.js` — Chrome-specific code using `chrome.*` callback-based API.
-- `firefox/content.firefox.js`, `firefox/popup.firefox.js`, `firefox/background.firefox.js` — Firefox-specific code using `browser.*` Promise-based API.
+- `chrome_source/content.chrome.js`, `chrome_source/popup.chrome.js`, `chrome_source/background.chrome.js` — Chrome-specific code using `chrome.*` callback-based API.
+- `firefox_source/content.firefox.js`, `firefox_source/popup.firefox.js`, `firefox_source/background.firefox.js` — Firefox-specific code using `browser.*` Promise-based API.
 
 ## Generated files
-`scripts/sync-content-shared.js` concatenates each shared file with its browser-specific stub and copies HTML/icons into the browser folders. Run:
+`scripts/sync-content-shared.js` concatenates each shared file with its browser-specific stub and copies HTML, icons, and `manifest.json` into the package folders. Run:
 ```
 npm run sync
 ```
-The generated `content.js`, `popup.js`, `background.js`, `popup.html`, and `icons/` in each browser folder are committed so the extension loads without needing to run sync first. **Do not edit them directly — edit the shared or stub sources instead.**
+The generated `content.js`, `popup.js`, `background.js`, `popup.html`, `popup.css`, `manifest.json`, and `icons/` are written to `chrome.package/` and `firefox.package/`. These folders are listed in `.gitignore` and must be regenerated before loading the extension. **Do not edit them directly — edit the shared or stub sources instead.**
+
+To remove all generated package files:
+```
+npm run clean
+```
 
 ## Browser-specific boundaries
-- Chrome uses **Manifest V3** in `chrome/manifest.json` with `background.service_worker` and the `chrome.*` API.
-- Firefox uses **Manifest V2** in `firefox/manifest.json` with `background.scripts`, `browser_action`, and the `browser.*` Promise-based API.
+- Chrome uses **Manifest V3** in `chrome_source/manifest.json` with `background.service_worker` and the `chrome.*` API.
+- Firefox uses **Manifest V2** in `firefox_source/manifest.json` with `background.scripts`, `browser_action`, and the `browser.*` Promise-based API.
 - Keep behavior aligned while preserving API style. Do not "normalize" one side into the other unless you also update the manifest/runtime assumptions.
 
 ## Code patterns to preserve
@@ -41,27 +46,27 @@ The generated `content.js`, `popup.js`, `background.js`, `popup.html`, and `icon
 - This repo favors tiny, direct scripts over abstraction.
 
 ## Working in this repo
-- Manual load:
-  - Chromium browsers: load the `chrome/` folder as an unpacked extension.
-  - Firefox: load `firefox/manifest.json` from `about:debugging`.
+- Manual load (run `npm run sync` first):
+  - Chromium browsers: load the `chrome.package/` folder as an unpacked extension.
+  - Firefox: load `firefox.package/manifest.json` from `about:debugging`.
 - Optional dev loop from the README uses `web-ext`:
   - Firefox: `npm run firefox` (watch mode)
   - Chromium: `npm run chrome` (watch mode)
-- After editing shared or stub sources, run `npm run sync` to regenerate the extension files.
+- After editing shared or stub sources, run `npm run sync` to regenerate the package folders.
 - Debugging is browser-native:
   - popup issues: inspect the extension popup window
   - content-script issues: open DevTools on `https://www.linkedin.com/feed/`
 
 ## Change checklist for agents
 - For shared logic changes: edit `shared/*.shared.js` or `shared/popup.html`, then run `npm run sync`.
-- For browser-specific changes: edit the relevant `*.chrome.js` or `*.firefox.js` stub, then run `npm run sync`.
-- Do **not** edit the generated files (`content.js`, `popup.js`, `background.js`, `popup.html`, `icons/`) inside the browser folders directly.
+- For browser-specific changes: edit the relevant `*.chrome.js` or `*.firefox.js` stub in `chrome_source/` or `firefox_source/`, then run `npm run sync`.
+- Do **not** edit the generated files (`content.js`, `popup.js`, `background.js`, `popup.html`, `icons/`) inside the package folders directly.
 - If you add selectors or state handling, update the README examples only if they become inaccurate.
 - When adjusting badge/popup behavior, trace the full loop: storage → popup UI → tab message → content script → background badge.
 
 ## Key files
 - `README.md`
 - `shared/content.shared.js`, `shared/popup.shared.js`, `shared/background.shared.js`, `shared/popup.html`, `shared/icons/`
-- `chrome/manifest.json`, `chrome/jsconfig.json`, `chrome/content.chrome.js`, `chrome/popup.chrome.js`, `chrome/background.chrome.js`
-- `firefox/manifest.json`, `firefox/jsconfig.json`, `firefox/content.firefox.js`, `firefox/popup.firefox.js`, `firefox/background.firefox.js`
-- `scripts/sync-content-shared.js`
+- `chrome_source/manifest.json`, `chrome_source/jsconfig.json`, `chrome_source/content.chrome.js`, `chrome_source/popup.chrome.js`, `chrome_source/background.chrome.js`
+- `firefox_source/manifest.json`, `firefox_source/jsconfig.json`, `firefox_source/content.firefox.js`, `firefox_source/popup.firefox.js`, `firefox_source/background.firefox.js`
+- `scripts/sync-content-shared.js`, `scripts/clean-packages.js`

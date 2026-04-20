@@ -59,34 +59,33 @@ LinkedIn-Feed-Vanisher/
 │       ├── icon48.png / icon48-dim.png
 │       └── icon128.png / icon128-dim.png
 │
-├── chrome/                        # Chrome / Chromium extension (Manifest V3)
-│   ├── manifest.json              # Extension manifest (unique)
-│   ├── jsconfig.json              # TypeScript/JS config (unique)
+├── chrome_source/                 # Chrome / Chromium source files (Manifest V3)
+│   ├── manifest.json              # Extension manifest
+│   ├── jsconfig.json              # TypeScript/JS config
 │   ├── content.chrome.js          # Chrome-specific content-script additions
 │   ├── popup.chrome.js            # Chrome-specific popup additions
-│   ├── background.chrome.js       # Chrome-specific background additions
-│   │── content.js                 # ⚙️ Generated — do not edit directly
-│   ├── popup.js                   # ⚙️ Generated — do not edit directly
-│   ├── background.js              # ⚙️ Generated — do not edit directly
-│   ├── popup.html                 # ⚙️ Generated — do not edit directly
-│   ├── popup.css                  # ⚙️ Generated — do not edit directly
-│   └── icons/                     # ⚙️ Generated — do not edit directly
+│   └── background.chrome.js       # Chrome-specific background additions
 │
-├── firefox/                       # Firefox extension (Manifest V2)
-│   ├── manifest.json              # Extension manifest (unique)
-│   ├── jsconfig.json              # TypeScript/JS config (unique)
+├── firefox_source/                # Firefox source files (Manifest V2)
+│   ├── manifest.json              # Extension manifest
+│   ├── jsconfig.json              # TypeScript/JS config
 │   ├── content.firefox.js         # Firefox-specific content-script additions
 │   ├── popup.firefox.js           # Firefox-specific popup additions
-│   ├── background.firefox.js      # Firefox-specific background additions
-│   ├── content.js                 # ⚙️ Generated — do not edit directly
-│   ├── popup.js                   # ⚙️ Generated — do not edit directly
-│   ├── background.js              # ⚙️ Generated — do not edit directly
-│   ├── popup.html                 # ⚙️ Generated — do not edit directly
-│   ├── popup.css                  # ⚙️ Generated — do not edit directly
-│   └── icons/                     # ⚙️ Generated — do not edit directly
+│   └── background.firefox.js      # Firefox-specific background additions
+│
+├── chrome.package/                # ⚙️ Generated — Chrome extension ready for loading/packing
+│   ├── manifest.json, content.js, popup.js, background.js
+│   ├── popup.html, popup.css
+│   └── icons/
+│
+├── firefox.package/               # ⚙️ Generated — Firefox extension ready for loading/packing
+│   ├── manifest.json, content.js, popup.js, background.js
+│   ├── popup.html, popup.css
+│   └── icons/
 │
 ├── scripts/
-│   └── sync-content-shared.js     # Generates browser-specific files from shared sources
+│   ├── sync-content-shared.js     # Generates package folders from shared + source files
+│   └── clean-packages.js          # Removes all generated files from package folders
 │
 ├── DESIGN.md                      # Color palette, styling conventions, and design system
 └── README.md
@@ -94,18 +93,23 @@ LinkedIn-Feed-Vanisher/
 
 ### How the shared/generated structure works
 
-Shared logic lives in `shared/`. Browser-specific code lives in `chrome/*.chrome.js` and `firefox/*.firefox.js` stub files. The sync script concatenates them into the complete extension files loaded by each browser.
+Shared logic lives in `shared/`. Browser-specific code lives in `chrome_source/*.chrome.js` and `firefox_source/*.firefox.js` stub files. The sync script concatenates them into the complete extension files and writes them — together with `manifest.json`, `popup.html`, `popup.css`, and `icons/` — into `chrome.package/` and `firefox.package/`. Those package folders contain **only** the files needed to load or build the extension.
 
 **Styling** is controlled entirely by `shared/popup.css`, which uses CSS custom properties so that every color can be changed from a single place. See [DESIGN.md](DESIGN.md) for the full color palette and styling conventions.
 
-To regenerate after editing shared or stub files:
+To regenerate the package folders after editing shared or stub files:
 ```bash
 npm run sync
 ```
 
-> **Note:** The generated files (`.js`, `.html`, `.css`, `icons/` in each browser folder) are committed to the repository so the extension can be loaded directly without running the sync script first.
+To remove all generated files from the package folders:
+```bash
+npm run clean
+```
 
-The only files that require manual maintenance per-browser are `manifest.json`, `jsconfig.json`, and the `*.chrome.js` / `*.firefox.js` stubs.
+> **Note:** `chrome.package/` and `firefox.package/` are generated artifacts and are listed in `.gitignore`. Run `npm run sync` to recreate them at any time.
+
+The only files that require manual maintenance per-browser are `manifest.json`, `jsconfig.json`, and the `*.chrome.js` / `*.firefox.js` stubs in `chrome_source/` and `firefox_source/`.
 
 ---
 
@@ -117,11 +121,16 @@ The only files that require manual maintenance per-browser are `manifest.json`, 
    ```bash
    git clone https://github.com/ajw170/LinkedIn-Feed-Vanisher.git
    ```
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable **Developer Mode** (toggle in the top-right corner)
-4. Click **"Load unpacked"**
-5. Select the **`chrome/`** folder from the cloned repository
-6. The 🌀 icon will appear in your toolbar. Click it to toggle the feed!
+2. Run `npm install && npm run sync` to generate the extension package:
+   ```bash
+   npm install
+   npm run sync
+   ```
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable **Developer Mode** (toggle in the top-right corner)
+5. Click **"Load unpacked"**
+6. Select the **`chrome.package/`** folder from the cloned repository
+7. The 🌀 icon will appear in your toolbar. Click it to toggle the feed!
 
 > 💡 **Edge:** Go to `edge://extensions/` and follow the same steps.
 > 💡 **Brave:** Go to `brave://extensions/` and follow the same steps.
@@ -135,11 +144,17 @@ The only files that require manual maintenance per-browser are `manifest.json`, 
    git clone https://github.com/ajw170/LinkedIn-Feed-Vanisher.git
    ```
 
-2. Open Firefox and go to `about:debugging`
-3. Click **"This Firefox"** in the left sidebar
-4. Click **"Load Temporary Add-on…"**
-5. Navigate to the **`firefox/`** folder and select **`manifest.json`**
-6. The 🌀 icon will appear in your toolbar!
+2. Run `npm install && npm run sync` to generate the extension package:
+   ```bash
+   npm install
+   npm run sync
+   ```
+
+3. Open Firefox and go to `about:debugging`
+4. Click **"This Firefox"** in the left sidebar
+5. Click **"Load Temporary Add-on…"**
+6. Navigate to the **`firefox.package/`** folder and select **`manifest.json`**
+7. The 🌀 icon will appear in your toolbar!
 
 ## 🖥️ Running & Editing in an IDE
 
@@ -158,7 +173,7 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
    - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) — code formatting
    - [Browser Preview](https://marketplace.visualstudio.com/items?itemName=auchenberg.vscode-browser-preview) — preview HTML popup files
 
-3. **Edit files** in `chrome/` or `firefox/` depending on your target browser.
+3. **Edit files** in `chrome_source/` or `firefox_source/` depending on your target browser.
 
 4. **Live-reload during development:**
 
@@ -171,13 +186,14 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
    | Command | Browser | Watch Mode | Purpose |
    |---------|---------|-----------|---------|
-   | `npm run sync` | — | — | Regenerate browser-specific files from shared sources (runs automatically before the commands below) |
+   | `npm run sync` | — | — | Regenerate package folders from shared + source files (runs automatically before the commands below) |
+   | `npm run clean` | — | — | Remove all generated files from `chrome.package/` and `firefox.package/` |
    | `npm run firefox` | Firefox | ✅ Yes | Sync + launch Firefox with default auto-reload behavior |
    | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with default auto-reload behavior |
    | `npm run firefox:run` | Firefox | ❌ No | Sync + one-time Firefox launch (`--no-reload`) |
    | `npm run chrome:run` | Chromium | ❌ No | Sync + one-time Chromium launch (`--no-reload`) |
-   | `npm run build:firefox` | Firefox | — | Sync + build package zip to `firefox/linkedin-feed-vanisher-firefox.zip` |
-   | `npm run build:chrome` | Chromium | — | Sync + build package zip to `chrome/linkedin-feed-vanisher-chrome.zip` |
+   | `npm run build:firefox` | Firefox | — | Sync + build package zip to `firefox_source/linkedin-feed-vanisher-firefox.zip` |
+   | `npm run build:chrome` | Chromium | — | Sync + build package zip to `chrome_source/linkedin-feed-vanisher-chrome.zip` |
    | `npm run build:chromium` | Chromium | — | Alias of `npm run build:chrome` |
 
    **Example:**
@@ -242,7 +258,7 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 
 ## 🔧 Customisation
 
-Want to hide (or show) additional LinkedIn elements? Open `shared/content.shared.js` and add CSS selectors to the `FEED_SELECTORS` array, then run `npm run sync` to regenerate the browser files:
+Want to hide (or show) additional LinkedIn elements? Open `shared/content.shared.js` and add CSS selectors to the `FEED_SELECTORS` array, then run `npm run sync` to regenerate the package folders:
 
 ```js
 const FEED_SELECTORS = [
@@ -268,7 +284,7 @@ Pull requests are welcome! 🎉
 4. Push the branch: `git push origin feature/my-awesome-feature`
 5. Open a Pull Request
 
-Please keep the shared sources (`shared/`) updated for logic that applies to both browsers. Only put browser-specific code in the `*.chrome.js` / `*.firefox.js` stubs. Run `npm run sync` after any changes to regenerate the browser-specific extension files.
+Please keep the shared sources (`shared/`) updated for logic that applies to both browsers. Only put browser-specific code in the `*.chrome.js` / `*.firefox.js` stubs inside `chrome_source/` and `firefox_source/`. Run `npm run sync` after any changes to regenerate the package folders.
 
 For styling changes, consult [DESIGN.md](DESIGN.md) and update the CSS custom properties in `shared/popup.css` rather than adding hard-coded color values.
 
