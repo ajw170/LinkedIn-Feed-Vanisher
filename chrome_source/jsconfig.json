@@ -1,8 +1,8 @@
-﻿{
+{
   "compilerOptions": {
     "checkJs": true,
     "lib": ["ES2022", "DOM"],
-    "types": ["firefox-webext-browser"]
+    "types": ["chrome"]
   },
   "include": ["**/*.js", "../shared/**/*.js"]
 }
