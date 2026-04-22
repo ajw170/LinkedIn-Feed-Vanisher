@@ -44,6 +44,7 @@ npm run clean
 - Feed hiding is selector-driven via `FEED_SELECTORS` in `shared/content.shared.js`; update that array first when LinkedIn changes DOM structure, then run `npm run sync`.
 - The popup HTML is in `shared/popup.html` and includes inline CSS plus fixed element ids: `toggle`, `statusBadge`, `statusText`.
 - This repo favors tiny, direct scripts over abstraction.
+- Semantic HTML is preferred over `id` attributes.
 
 ## Working in this repo
 - Manual load (run `npm run sync` first):

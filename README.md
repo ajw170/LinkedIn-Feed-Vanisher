@@ -238,9 +238,10 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
 ```
 ┌──────────────┐   toggle click   ┌───────────────┐   sendMessage   ┌─────────────────┐
 │  popup.html  │ ───────────────► │   popup.js    │ ──────────────► │  content.js     │
-│  (toolbar)   │                  │  (reads/saves │                  │  (injects CSS   │
-└──────────────┘                  │   storage)    │                  │   to hide feed) │
-                                  └───────────────┘                  └─────────────────┘
+│  (toolbar)   │                  │  (reads/saves │                  │ (removes feed   │
+└──────────────┘                  │   storage)    │                  │  and inserts a  │
+                                  └───────────────┘                  │  placeholder)   │
+                                                                      └─────────────────┘
                                          │
                                          ▼ sendMessage
                                   ┌───────────────┐
@@ -250,8 +251,8 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
                                   └───────────────┘
 ```
 
-1. **`content.js`** is injected into every `linkedin.com` page. It reads the saved state from `chrome.storage.local` / `browser.storage.local` and injects a `<style>` tag that hides the feed with `display: none !important`.
-2. **`popup.js`** renders the toggle switch. When you flip it, it saves the new state to storage and sends a message to the active tab's content script to apply or remove the CSS.
+1. **`content.js`** is injected into every `linkedin.com` page. It reads `feedVanished` from extension storage and, when enabled, removes the feed DOM node, inserts a calm placeholder message, and keeps that state applied across LinkedIn re-renders.
+2. **`popup.js`** renders the toggle switch. When you flip it, it saves the new state to storage and sends a message to the active tab's content script to hide or restore the feed.
 3. **`background.js`** listens for state-change events and updates the badge text on the toolbar icon so you always know the current state at a glance.
 
 ---
