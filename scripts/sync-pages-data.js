@@ -63,8 +63,21 @@ function parseTagline() {
 }
 
 function parseWarning() {
-  const warningMatch = readme.match(/^>\s+\*\*Work in progress:\*\*.+$/m);
-  return warningMatch ? stripBlockquote(warningMatch[0]) : '';
+  const warningStart = readme.indexOf('> [!WARNING]');
+  const titleMatch = readme.match(/^#\s+.+$/m);
+
+  if (warningStart === -1 || !titleMatch) {
+    return '';
+  }
+
+  return readme
+    .slice(warningStart, titleMatch.index)
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith('>') && line !== '> [!WARNING]')
+    .map((line) => stripBlockquote(line))
+    .join(' ')
+    .trim();
 }
 
 function parseQuickInstallLinks() {
@@ -159,8 +172,13 @@ function parseInstallation() {
 }
 
 function parseLicense() {
-  const section = sectionBetween('## 📜 License', '<p align="center">Made with 💜 to help you stay focused</p>');
-  return section.replace(/^---$/gm, '').trim();
+  const section = sectionBetween('## 📜 License');
+
+  return section
+    .split('\n')
+    .map((line) => line.trim())
+    .find((line) => line && line !== '---' && !line.startsWith('<p '))
+    || '';
 }
 
 const { description, comparison } = parseDescriptionAndComparison();
