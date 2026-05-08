@@ -4,6 +4,7 @@
   "description": "Removes the LinkedIn news feed for maximum focus.",
   "scripts": {
     "sync": "node scripts/sync-content-shared.js",
+    "sync:pages": "node scripts/sync-pages-data.js",
     "clean": "node scripts/clean-packages.js",
     "prefirefox": "npm run sync",
     "firefox": "web-ext run --source-dir=firefox.package",
