@@ -24,6 +24,21 @@ function sectionBetween(startMarker, endMarker) {
   return readme.slice(contentStart, endIndex).trim();
 }
 
+function sectionForLevelTwoHeading(heading) {
+  const startIndex = readme.indexOf(heading);
+
+  if (startIndex === -1) {
+    throw new Error(`Could not find heading: ${heading}`);
+  }
+
+  const contentStart = readme.indexOf('\n', startIndex) + 1;
+  const remaining = readme.slice(contentStart);
+  const nextHeadingMatch = remaining.match(/^##\s+.+$/m);
+  const endIndex = nextHeadingMatch ? contentStart + nextHeadingMatch.index : readme.length;
+
+  return readme.slice(contentStart, endIndex).trim();
+}
+
 function stripBlockquote(value) {
   return value
     .replace(/^>\s*/gm, '')
@@ -81,10 +96,7 @@ function parseWarning() {
 }
 
 function parseQuickInstallLinks() {
-  const section = sectionBetween(
-    '## 🚀 I don\'t care about the technical details, just let me install the extension!',
-    '## 💗 Support',
-  );
+  const section = sectionForLevelTwoHeading('## 🚀 I don\'t care about the technical details, just let me install the extension!');
 
   return section
     .split('\n')
@@ -103,13 +115,13 @@ function parseQuickInstallLinks() {
 }
 
 function parseSupportUrl() {
-  const section = sectionBetween('## 💗 Support', '## 🌐 GitHub Pages microsite');
+  const section = sectionForLevelTwoHeading('## 💗 Support');
   const match = section.match(/href="([^"]+)"/);
   return match ? match[1] : '';
 }
 
 function parseDescriptionAndComparison() {
-  const section = sectionBetween('## 🎭 What Does It Do?', '## 📁 Repository Structure');
+  const section = sectionForLevelTwoHeading('## 🎭 What Does It Do?');
   const [beforeTable] = section.split('| Before 😩 | After 🎉 |');
   const description = beforeTable
     .split('\n\n')
@@ -144,7 +156,7 @@ function parseFeatures() {
 }
 
 function parseInstallation() {
-  const section = sectionBetween('## 🚀 Installation', '## 🖥️ Running & Editing in an IDE');
+  const section = sectionForLevelTwoHeading('## 🚀 Installation');
   const entries = section
     .split(/^###\s+/m)
     .map((entry) => entry.trim())
