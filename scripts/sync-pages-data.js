@@ -87,14 +87,15 @@ function parseTagline() {
 
 function parseWarning() {
   const warningStart = readme.indexOf('> [!WARNING]');
-  const titleMatch = readme.match(/^#\s+.+$/m);
+  const afterWarning = warningStart === -1 ? '' : readme.slice(warningStart);
+  const titleMatch = afterWarning.match(/^#\s+.+$/m);
 
   if (warningStart === -1 || !titleMatch) {
     return '';
   }
 
-  return readme
-    .slice(warningStart, titleMatch.index)
+  return afterWarning
+    .slice(0, titleMatch.index)
     .split('\n')
     .map((line) => line.trim())
     .filter((line) => line.startsWith('>') && line !== '> [!WARNING]')
@@ -124,7 +125,7 @@ function parseQuickInstallLinks() {
 
 function parseSupportUrl() {
   const section = sectionForLevelTwoHeading(HEADINGS.support);
-  const match = section.match(/href="([^"]+)"/);
+  const match = section.match(/href="([^"]+)"/) || section.match(/\[[^\]]+\]\((https?:\/\/[^)]+)\)/);
   return match ? match[1] : '';
 }
 
