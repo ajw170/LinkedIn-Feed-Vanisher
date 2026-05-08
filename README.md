@@ -25,6 +25,8 @@
 
 This repository now includes a **Jekyll-powered GitHub Pages microsite** in [`docs/`](docs/), which is designed to act as a lightweight promotional landing page for the extension.
 
+If you want a beginner-friendly technical explanation of how this Jekyll/GitHub Pages/Ruby setup works in this repository, see [JEKYLL.md](JEKYLL.md).
+
 - GitHub Pages source folder: `docs/`
 - Jekyll config: `docs/_config.yml`
 - README-derived site data: `docs/_data/readme.json`
