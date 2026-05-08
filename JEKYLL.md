@@ -16,7 +16,7 @@ It is written for someone who may not already know:
 
 This repository now has a promotional microsite in:
 
-`/home/runner/work/LinkedIn-Feed-Vanisher/LinkedIn-Feed-Vanisher/docs`
+`docs/`
 
 GitHub Pages can be configured to host a site directly from that `docs/` folder.
 
@@ -116,7 +116,7 @@ as roughly comparable ideas.
 
 The file:
 
-`/home/runner/work/LinkedIn-Feed-Vanisher/LinkedIn-Feed-Vanisher/docs/Gemfile`
+`docs/Gemfile`
 
 declares which Ruby dependencies are needed for the microsite.
 
