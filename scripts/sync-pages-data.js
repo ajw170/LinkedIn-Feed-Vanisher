@@ -87,10 +87,15 @@ function parseTagline() {
 
 function parseWarning() {
   const warningStart = readme.indexOf('> [!WARNING]');
-  const afterWarning = warningStart === -1 ? '' : readme.slice(warningStart);
+
+  if (warningStart === -1) {
+    return '';
+  }
+
+  const afterWarning = readme.slice(warningStart);
   const titleMatch = afterWarning.match(/^#\s+.+$/m);
 
-  if (warningStart === -1 || !titleMatch) {
+  if (!titleMatch) {
     return '';
   }
 
@@ -125,6 +130,8 @@ function parseQuickInstallLinks() {
 
 function parseSupportUrl() {
   const section = sectionForLevelTwoHeading(HEADINGS.support);
+  // Support is currently stored as an HTML anchor in README.md, but this fallback
+  // also handles a future switch to standard Markdown link syntax.
   const match = section.match(/href="([^"]+)"/) || section.match(/\[[^\]]+\]\((https?:\/\/[^)]+)\)/);
   return match ? match[1] : '';
 }
@@ -199,7 +206,7 @@ function parseLicense() {
     .split('\n')
     .map((line) => line.trim())
     .find((line) => line && line !== '---' && !line.startsWith('<p '))
-    || '';
+    ?? '';
 }
 
 const { description, comparison } = parseDescriptionAndComparison();
