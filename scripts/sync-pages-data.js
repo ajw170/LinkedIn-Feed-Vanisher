@@ -4,6 +4,14 @@ const path = require('path');
 const repoRoot = path.resolve(__dirname, '..');
 const readmePath = path.join(repoRoot, 'README.md');
 const outputPath = path.join(repoRoot, 'docs', '_data', 'readme.json');
+const HEADINGS = {
+  quickInstall: '## 🚀 I don\'t care about the technical details, just let me install the extension!',
+  support: '## 💗 Support',
+  description: '## 🎭 What Does It Do?',
+  features: '### ✨ Features',
+  installation: '## 🚀 Installation',
+  license: '## 📜 License',
+};
 
 const readme = fs.readFileSync(readmePath, 'utf8').replace(/\r\n/g, '\n');
 
@@ -96,7 +104,7 @@ function parseWarning() {
 }
 
 function parseQuickInstallLinks() {
-  const section = sectionForLevelTwoHeading('## 🚀 I don\'t care about the technical details, just let me install the extension!');
+  const section = sectionForLevelTwoHeading(HEADINGS.quickInstall);
 
   return section
     .split('\n')
@@ -115,13 +123,13 @@ function parseQuickInstallLinks() {
 }
 
 function parseSupportUrl() {
-  const section = sectionForLevelTwoHeading('## 💗 Support');
+  const section = sectionForLevelTwoHeading(HEADINGS.support);
   const match = section.match(/href="([^"]+)"/);
   return match ? match[1] : '';
 }
 
 function parseDescriptionAndComparison() {
-  const section = sectionForLevelTwoHeading('## 🎭 What Does It Do?');
+  const section = sectionForLevelTwoHeading(HEADINGS.description);
   const [beforeTable] = section.split('| Before 😩 | After 🎉 |');
   const description = beforeTable
     .split('\n\n')
@@ -146,7 +154,7 @@ function parseDescriptionAndComparison() {
 }
 
 function parseFeatures() {
-  const section = sectionBetween('### ✨ Features', '---');
+  const section = sectionBetween(HEADINGS.features, '---');
 
   return section
     .split('\n')
@@ -156,7 +164,7 @@ function parseFeatures() {
 }
 
 function parseInstallation() {
-  const section = sectionForLevelTwoHeading('## 🚀 Installation');
+  const section = sectionForLevelTwoHeading(HEADINGS.installation);
   const entries = section
     .split(/^###\s+/m)
     .map((entry) => entry.trim())
@@ -184,7 +192,7 @@ function parseInstallation() {
 }
 
 function parseLicense() {
-  const section = sectionBetween('## 📜 License');
+  const section = sectionBetween(HEADINGS.license);
 
   return section
     .split('\n')

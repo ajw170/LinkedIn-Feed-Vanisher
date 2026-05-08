@@ -72,13 +72,13 @@ title: Focus on LinkedIn, not the feed
           <h3>{{ entry.title }}</h3>
           <ol>
             {% for step in entry.steps %}
-              <li>{{ step | markdownify | remove: '<p>' | remove: '</p>' }}</li>
+              <li>{{ step | markdownify }}</li>
             {% endfor %}
           </ol>
           {% if entry.notes.size > 0 %}
             <ul class="install-notes">
               {% for note in entry.notes %}
-                <li>{{ note | markdownify | remove: '<p>' | remove: '</p>' }}</li>
+                <li>{{ note | markdownify }}</li>
               {% endfor %}
             </ul>
           {% endif %}
