@@ -1,15 +1,22 @@
 // LinkedIn Feed Vanisher — Content Script
 // Hides the LinkedIn news feed so you can browse without distraction.
 
-const STORAGE_KEY = 'feedVanished';
-const PLACEHOLDER_ID = 'lfv-tranquility-placeholder';
+const STORAGE_KEY = 'feedPreferences';
+const LEGACY_STORAGE_KEY = 'feedVanished';
+const NEWS_PLACEHOLDER_ID = 'lfv-tranquility-placeholder-news';
+const NOTIFICATIONS_PLACEHOLDER_ID = 'lfv-tranquility-placeholder-notifications';
 const LEGACY_STYLE_ID = 'lfv-hide-style';
 const PLACEHOLDER_STYLE_ID = 'lfv-placeholder-style';
+
+const DEFAULT_FEED_STATE = {
+  blockNewsFeed: true,
+  blockNotificationsFeed: false,
+};
 
 // CSS injected into the host page to style the feed placeholder.
 // Colors mirror the LinkedIn-palette values defined in shared/popup.css.
 const PLACEHOLDER_CSS = `
-#lfv-tranquility-placeholder {
+.lfv-tranquility-placeholder {
   margin: 24px 0;
   padding: 20px;
   border-radius: 8px;
@@ -26,7 +33,7 @@ const PLACEHOLDER_CSS = `
 // CSS selectors targeting the LinkedIn feed container and related elements.
 // LinkedIn periodically updates its DOM, so multiple selectors are provided
 // as fallbacks. Extend this list if new selectors are needed.
-const FEED_SELECTORS = [
+const NEWS_FEED_SELECTORS = [
   '.scaffold-finite-scroll__content',
   '[data-finite-scroll-hotkey-context="FEED"]',
   '.feed-following-feed',
@@ -41,14 +48,75 @@ const FEED_SELECTORS = [
   '[data-componentkey*="mainfeed"]',
 ];
 
-let removedFeed = null;
-let keepVanished = false;
+// WIP: these selectors are expected to evolve as LinkedIn changes markup.
+const NOTIFICATIONS_FEED_SELECTORS = [
+  '[data-view-name="notifications-page"] .scaffold-finite-scroll__content',
+  '.notifications .scaffold-finite-scroll__content',
+  '.nt-card-list',
+];
+
+const FEED_DEFINITIONS = {
+  news: {
+    selectors: NEWS_FEED_SELECTORS,
+    placeholderId: NEWS_PLACEHOLDER_ID,
+    placeholderText: 'News feed blocked. Enjoy the calm.',
+  },
+  notifications: {
+    selectors: NOTIFICATIONS_FEED_SELECTORS,
+    placeholderId: NOTIFICATIONS_PLACEHOLDER_ID,
+    placeholderText: 'Notifications feed blocked. Focus mode is on.',
+  },
+};
+
+let removedFeeds = {
+  news: null,
+  notifications: null,
+};
+
+let keepVanished = { ...DEFAULT_FEED_STATE };
 let feedObserver = null;
+
+function normalizeFeedState(rawState, legacyVanished) {
+  if (rawState && typeof rawState === 'object') {
+    return {
+      blockNewsFeed:
+        typeof rawState.blockNewsFeed === 'boolean'
+          ? rawState.blockNewsFeed
+          : DEFAULT_FEED_STATE.blockNewsFeed,
+      blockNotificationsFeed:
+        typeof rawState.blockNotificationsFeed === 'boolean'
+          ? rawState.blockNotificationsFeed
+          : DEFAULT_FEED_STATE.blockNotificationsFeed,
+    };
+  }
+
+  if (typeof legacyVanished === 'boolean') {
+    return {
+      blockNewsFeed: legacyVanished,
+      blockNotificationsFeed: DEFAULT_FEED_STATE.blockNotificationsFeed,
+    };
+  }
+
+  return { ...DEFAULT_FEED_STATE };
+}
+
+function isAnyFeedBlocked(feedState) {
+  return feedState.blockNewsFeed || feedState.blockNotificationsFeed;
+}
+
+function getCurrentState() {
+  return { ...keepVanished };
+}
 
 function startFeedObserver() {
   if (feedObserver) return;
   feedObserver = new MutationObserver(() => {
-    if (keepVanished) hideFeed();
+    if (keepVanished.blockNewsFeed) {
+      hideFeed('news');
+    }
+    if (keepVanished.blockNotificationsFeed) {
+      hideFeed('notifications');
+    }
   });
   feedObserver.observe(document.documentElement, { childList: true, subtree: true });
 }
@@ -59,8 +127,8 @@ function stopFeedObserver() {
   feedObserver = null;
 }
 
-function findFeedElement() {
-  for (const selector of FEED_SELECTORS) {
+function findFeedElement(selectors) {
+  for (const selector of selectors) {
     const element = document.querySelector(selector);
     if (element) return element;
   }
@@ -80,30 +148,53 @@ function removePlaceholderStyle() {
   if (style) style.remove();
 }
 
-function createPlaceholder() {
+function createPlaceholder(placeholderId, placeholderText) {
   const placeholder = document.createElement('div');
-  placeholder.id = PLACEHOLDER_ID;
-  placeholder.textContent = 'Enjoy the calm without the feed!';
+  placeholder.id = placeholderId;
+  placeholder.className = 'lfv-tranquility-placeholder';
+  placeholder.textContent = placeholderText;
   return placeholder;
 }
 
+function hasPlaceholderInDom() {
+  return Boolean(
+    document.getElementById(NEWS_PLACEHOLDER_ID) ||
+    document.getElementById(NOTIFICATIONS_PLACEHOLDER_ID)
+  );
+}
+
+function getTopLevelNodeHtml(node) {
+  if (!node || typeof node.cloneNode !== 'function') {
+    return '<unknown-node />';
+  }
+
+  // cloneNode(false) preserves the top-level element + attributes only.
+  return node.cloneNode(false).outerHTML;
+}
+
 /** Remove the feed node and replace it with a calm placeholder message. */
-function hideFeed() {
-  if (document.getElementById(PLACEHOLDER_ID)) return;
+function hideFeed(feedType) {
+  const definition = FEED_DEFINITIONS[feedType];
+  if (!definition) return;
+
+  if (document.getElementById(definition.placeholderId)) return;
 
   const legacyStyle = document.getElementById(LEGACY_STYLE_ID);
   if (legacyStyle) legacyStyle.remove();
 
-  const feed = findFeedElement();
+  const feed = findFeedElement(definition.selectors);
   if (!feed || !feed.parentNode) return;
 
   const parent = feed.parentNode;
   const nextSibling = feed.nextSibling;
-  removedFeed = { node: feed, parent, nextSibling };
+  removedFeeds[feedType] = { node: feed, parent, nextSibling };
+  const topLevelHtml = getTopLevelNodeHtml(feed);
   parent.removeChild(feed);
 
+  console.info(`[LFV] Removing ${feedType} feed node: ${topLevelHtml}`);
+
   injectPlaceholderStyle();
-  const placeholder = createPlaceholder();
+  const placeholder = createPlaceholder(definition.placeholderId, definition.placeholderText);
   if (nextSibling && nextSibling.parentNode === parent) {
     parent.insertBefore(placeholder, nextSibling);
   } else {
@@ -112,31 +203,47 @@ function hideFeed() {
 }
 
 /** Remove the placeholder and reinsert the original feed node. */
-function showFeed() {
-  const placeholder = document.getElementById(PLACEHOLDER_ID);
+function showFeed(feedType) {
+  const definition = FEED_DEFINITIONS[feedType];
+  if (!definition) return;
 
-  if (removedFeed && removedFeed.parent) {
-    const { node, parent, nextSibling } = removedFeed;
+  const placeholder = document.getElementById(definition.placeholderId);
+
+  if (removedFeeds[feedType] && removedFeeds[feedType].parent) {
+    const { node, parent, nextSibling } = removedFeeds[feedType];
     if (nextSibling && nextSibling.parentNode === parent) {
       parent.insertBefore(node, nextSibling);
     } else {
       parent.appendChild(node);
     }
-    removedFeed = null;
+    removedFeeds[feedType] = null;
   }
 
   if (placeholder) placeholder.remove();
-  removePlaceholderStyle();
+  if (!hasPlaceholderInDom()) {
+    removePlaceholderStyle();
+  }
 }
 
 /** Apply vanished/visible state. */
-function applyState(vanished) {
-  keepVanished = vanished;
-  if (vanished) {
+function applyState(feedState) {
+  keepVanished = normalizeFeedState(feedState);
+
+  if (isAnyFeedBlocked(keepVanished)) {
     startFeedObserver();
-    hideFeed();
   } else {
     stopFeedObserver();
-    showFeed();
+  }
+
+  if (keepVanished.blockNewsFeed) {
+    hideFeed('news');
+  } else {
+    showFeed('news');
+  }
+
+  if (keepVanished.blockNotificationsFeed) {
+    hideFeed('notifications');
+  } else {
+    showFeed('notifications');
   }
 }

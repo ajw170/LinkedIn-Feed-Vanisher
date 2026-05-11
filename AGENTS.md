@@ -6,12 +6,13 @@
 - The main design choice is simplicity: the extension hides LinkedIn UI by **removing the feed node from the DOM and replacing it with a placeholder**, not by CSS injection or DOM polling.
 
 ## Architecture and message flow
-- `content.js` is the feature engine. It reads `feedVanished` from extension storage and removes/restores the feed node in the DOM.
-- `popup.js` is the control surface. It updates the popup UI, persists the new state, sends `{ action: 'setVanished', vanished }` to the active tab, then sends `{ action: 'stateChanged', vanished }` to the background script.
-- `background.js` only manages the toolbar badge (`✓` with purple background when active).
+- `content.js` is the feature engine. It reads `feedPreferences` from extension storage and removes/restores news and notifications feed nodes in the DOM.
+- `popup.js` is the control surface. It updates the popup UI, persists the new state, sends `{ action: 'setFeedState', feedState }` to the active tab, then sends `{ action: 'stateChanged', feedState }` to the background script.
+- `background.js` only manages the toolbar badge (`✓` with blue background when one or more blockers are active).
 - Example state/action contract used across the repo:
-  - storage key: `feedVanished`
-  - content messages: `setVanished`, `getState`
+  - storage key: `feedPreferences` (legacy fallback: `feedVanished`)
+  - state shape: `{ blockNewsFeed: boolean, blockNotificationsFeed: boolean }`
+  - content messages: `setFeedState`, `getState`
   - background message: `stateChanged`
 
 ## Shared vs browser-specific split
@@ -40,8 +41,8 @@ npm run clean
 - Keep behavior aligned while preserving API style. Do not "normalize" one side into the other unless you also update the manifest/runtime assumptions.
 
 ## Code patterns to preserve
-- Default behavior is **feed hidden unless storage explicitly contains `false`**. See `result[STORAGE_KEY] !== false` in both `content.js`, `popup.js`, and `background.js`.
-- Feed hiding is selector-driven via `FEED_SELECTORS` in `shared/content.shared.js`; update that array first when LinkedIn changes DOM structure, then run `npm run sync`.
+- Default behavior is **news feed blocked by default**; notifications feed blocking is currently default-off until selectors stabilize.
+- Feed hiding is selector-driven via `NEWS_FEED_SELECTORS` and `NOTIFICATIONS_FEED_SELECTORS` in `shared/content.shared.js`; update those arrays first when LinkedIn changes DOM structure, then run `npm run sync`.
 - The popup HTML is in `shared/popup.html` and includes inline CSS plus fixed element ids: `toggle`, `statusBadge`, `statusText`.
 - This repo favors tiny, direct scripts over abstraction.
 - Semantic HTML is preferred over `id` attributes.
@@ -62,11 +63,11 @@ npm run clean
 - For shared logic changes: edit `shared/*.shared.js` or `shared/popup.html`, then run `npm run sync`.
 - For browser-specific changes: edit the relevant `*.chrome.js` or `*.firefox.js` stub in `chrome_source/` or `firefox_source/`, then run `npm run sync`.
 - Do **not** edit the generated files (`content.js`, `popup.js`, `background.js`, `popup.html`, `icons/`) inside the package folders directly.
-- If you add selectors or state handling, update the README examples only if they become inaccurate.
+- If you add selectors or state handling, update the README examples when they become inaccurate.
 - When adjusting badge/popup behavior, trace the full loop: storage → popup UI → tab message → content script → background badge.
 
 ## Key files
-- `README.md`
+- `README.md`, `DESIGN.md`
 - `shared/content.shared.js`, `shared/popup.shared.js`, `shared/background.shared.js`, `shared/popup.html`, `shared/icons/`
 - `chrome_source/manifest.json`, `chrome_source/jsconfig.json`, `chrome_source/content.chrome.js`, `chrome_source/popup.chrome.js`, `chrome_source/background.chrome.js`
 - `firefox_source/manifest.json`, `firefox_source/jsconfig.json`, `firefox_source/content.firefox.js`, `firefox_source/popup.firefox.js`, `firefox_source/background.firefox.js`

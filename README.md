@@ -36,9 +36,9 @@ LinkedIn is a fantastic networking tool — but that **infinite scrolling news f
 
 ### ✨ Features
 
-- 🚫 **Hides the LinkedIn news feed** on `linkedin.com/feed/` and the home page
-- 🔘 **One-click toggle** via the browser toolbar popup
-- 💾 **Remembers your preference** — feed stays hidden across page reloads
+- 🚫 **Blocks the LinkedIn news feed** with its own popup toggle
+- 🔕 **Supports a separate notifications-feed toggle** (work in progress selectors)
+- 💾 **Remembers your preferences** across page reloads
 - 🔵 **Badge indicator** on the toolbar icon shows active/inactive state
 - 🦊 **Firefox** (Manifest V2) and 🟡 **Chrome/Chromium** (Manifest V3) supported
 
@@ -251,23 +251,27 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
                                   └───────────────┘
 ```
 
-1. **`content.js`** is injected into every `linkedin.com` page. It reads `feedVanished` from extension storage and, when enabled, removes the feed DOM node, inserts a calm placeholder message, and keeps that state applied across LinkedIn re-renders.
-2. **`popup.js`** renders the toggle switch. When you flip it, it saves the new state to storage and sends a message to the active tab's content script to hide or restore the feed.
-3. **`background.js`** listens for state-change events and updates the badge text on the toolbar icon so you always know the current state at a glance.
+1. **`content.js`** is injected into every `linkedin.com` page. It reads `feedPreferences` from extension storage and applies two independent blockers: one for news feed, one for notifications feed.
+2. **`popup.js`** renders two toggle switches. When either changes, it saves the full feed-preference state and notifies the active tab's content script to apply it immediately.
+3. **`background.js`** listens for state-change events and updates the badge text on the toolbar icon whenever one or more feed blockers are active.
 
 ---
 
 ## 🔧 Customisation
 
-Want to hide (or show) additional LinkedIn elements? Open `shared/content.shared.js` and add CSS selectors to the `FEED_SELECTORS` array, then run `npm run sync` to regenerate the package folders:
+Want to hide (or show) additional LinkedIn elements? Open `shared/content.shared.js` and add CSS selectors to `NEWS_FEED_SELECTORS` or `NOTIFICATIONS_FEED_SELECTORS`, then run `npm run sync` to regenerate the package folders:
 
 ```js
-const FEED_SELECTORS = [
+const NEWS_FEED_SELECTORS = [
   '.scaffold-finite-scroll__content',  // main feed container
   '[data-finite-scroll-hotkey-context="FEED"]',
   '.feed-following-feed',
   '.news-module',                      // "LinkedIn News" sidebar widget
   // ✏️ Add your own selectors here!
+];
+
+const NOTIFICATIONS_FEED_SELECTORS = [
+  // WIP: add and refine selectors for LinkedIn notifications pages/cards.
 ];
 ```
 

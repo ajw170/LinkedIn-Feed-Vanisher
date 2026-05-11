@@ -1,21 +1,22 @@
 // Firefox-specific: badge updates and event listeners (Manifest V2).
 
 /** Update the action badge to reflect the current vanished state. */
-function updateBadge(vanished) {
-  browser.browserAction.setBadgeText({ text: vanished ? '✓' : '' });
-  browser.browserAction.setBadgeBackgroundColor({ color: vanished ? '#0A66C2' : '#B0B0B0' });
+function updateBadge(anyBlocked) {
+  browser.browserAction.setBadgeText({ text: anyBlocked ? '✓' : '' });
+  browser.browserAction.setBadgeBackgroundColor({ color: anyBlocked ? '#0A66C2' : '#B0B0B0' });
 }
 
 async function updateActionAppearance() {
-  const result = await browser.storage.local.get([STORAGE_KEY]);
-  const vanished = result[STORAGE_KEY] !== false;
+  const result = await browser.storage.local.get([STORAGE_KEY, LEGACY_STORAGE_KEY]);
+  const feedState = normalizeFeedState(result[STORAGE_KEY], result[LEGACY_STORAGE_KEY]);
+  const anyBlocked = isAnyFeedBlocked(feedState);
 
   const tabs = await browser.tabs.query({ active: true, lastFocusedWindow: true });
   const activeTab = tabs[0];
-  const shouldIlluminate = vanished && isLinkedInUrl(activeTab?.url);
+  const shouldIlluminate = anyBlocked && isLinkedInUrl(activeTab?.url);
 
   await browser.browserAction.setIcon({ path: shouldIlluminate ? ICON_PATHS.illuminated : ICON_PATHS.dim });
-  updateBadge(vanished);
+  updateBadge(anyBlocked);
 }
 
 // Restore badge state when the background page loads.
@@ -46,7 +47,10 @@ browser.windows.onFocusChanged.addListener(() => {
 // Set default state on first install.
 browser.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    browser.storage.local.set({ [STORAGE_KEY]: true }).then(() => {
+    browser.storage.local.set({
+      [STORAGE_KEY]: DEFAULT_FEED_STATE,
+      [LEGACY_STORAGE_KEY]: DEFAULT_FEED_STATE.blockNewsFeed,
+    }).then(() => {
       updateActionAppearance();
     });
     return;
