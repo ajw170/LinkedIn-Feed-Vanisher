@@ -18,18 +18,29 @@
   <main>
     <div class="toggle-row">
       <div class="toggle-label">
-        <span>Hide the feed</span>
-        <span>Remove LinkedIn's news feed</span>
+        <span>Block news feed</span>
+        <span>Remove LinkedIn's main feed timeline</span>
       </div>
-      <label class="switch" aria-label="Toggle feed visibility">
-        <input type="checkbox" id="toggle" />
+      <label class="switch" aria-label="Toggle news feed blocking">
+        <input type="checkbox" id="newsToggle" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span>Block notifications feed</span>
+        <span>WIP: selectors will be refined over time</span>
+      </div>
+      <label class="switch" aria-label="Toggle notifications feed blocking">
+        <input type="checkbox" id="notificationsToggle" />
         <span class="slider"></span>
       </label>
     </div>
 
     <div class="status-badge vanished" id="statusBadge">
       <div class="dot"></div>
-      <span id="statusText">Feed is hidden</span>
+      <span id="statusText">Blocking one or more feeds</span>
     </div>
   </main>
 

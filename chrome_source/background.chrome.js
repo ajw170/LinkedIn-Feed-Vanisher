@@ -1,21 +1,22 @@
 // Chrome-specific: badge updates and event listeners (Manifest V3).
 
 /** Update the action badge to reflect the current vanished state. */
-function updateBadge(vanished) {
-  chrome.action.setBadgeText({ text: vanished ? '✓' : '' });
-  chrome.action.setBadgeBackgroundColor({ color: vanished ? '#0A66C2' : '#B0B0B0' });
+function updateBadge(anyBlocked) {
+  chrome.action.setBadgeText({ text: anyBlocked ? '✓' : '' });
+  chrome.action.setBadgeBackgroundColor({ color: anyBlocked ? '#0A66C2' : '#B0B0B0' });
 }
 
 function updateActionAppearance() {
-  chrome.storage.local.get([STORAGE_KEY], (result) => {
-    const vanished = result[STORAGE_KEY] !== false;
+  chrome.storage.local.get([STORAGE_KEY, LEGACY_STORAGE_KEY], (result) => {
+    const feedState = normalizeFeedState(result[STORAGE_KEY], result[LEGACY_STORAGE_KEY]);
+    const anyBlocked = isAnyFeedBlocked(feedState);
 
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const activeTab = tabs[0];
-      const shouldIlluminate = vanished && isLinkedInUrl(activeTab?.url);
+      const shouldIlluminate = anyBlocked && isLinkedInUrl(activeTab?.url);
 
       chrome.action.setIcon({ path: shouldIlluminate ? ICON_PATHS.illuminated : ICON_PATHS.dim });
-      updateBadge(vanished);
+      updateBadge(anyBlocked);
     });
   });
 }
@@ -53,7 +54,10 @@ chrome.runtime.onStartup.addListener(() => {
 // Set default state on first install.
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    chrome.storage.local.set({ [STORAGE_KEY]: true });
+    chrome.storage.local.set({
+      [STORAGE_KEY]: DEFAULT_FEED_STATE,
+      [LEGACY_STORAGE_KEY]: DEFAULT_FEED_STATE.blockNewsFeed,
+    });
     updateActionAppearance();
     return;
   }
