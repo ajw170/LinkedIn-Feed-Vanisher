@@ -3,22 +3,17 @@
   "version": "1.0.0",
   "description": "Removes the LinkedIn news feed for maximum focus.",
   "scripts": {
-    "sync": "node scripts/sync-content-shared.js",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:chrome": "wxt build -b chrome",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "npm run zip:chrome && npm run zip:firefox",
+    "zip:chrome": "wxt zip -b chrome",
+    "zip:firefox": "wxt zip -b firefox",
+    "typecheck": "wxt prepare && tsc --noEmit",
     "sync:pages": "node scripts/sync-pages-data.js",
-    "clean": "node scripts/clean-packages.js",
-    "prefirefox": "npm run sync",
-    "firefox": "web-ext run --source-dir=firefox.package",
-    "prechrome": "npm run sync",
-    "chrome": "web-ext run --source-dir=chrome.package --target chromium",
-    "prefirefox:run": "npm run sync",
-    "firefox:run": "web-ext run --source-dir=firefox.package --no-reload",
-    "prechrome:run": "npm run sync",
-    "chrome:run": "web-ext run --source-dir=chrome.package --target chromium --no-reload",
-    "prebuild:firefox": "npm run sync",
-    "build:firefox": "web-ext build --source-dir=firefox.package --artifacts-dir=firefox_source --filename=linkedin-feed-vanisher-firefox.zip --overwrite-dest",
-    "prebuild:chrome": "npm run sync",
-    "build:chrome": "web-ext build --source-dir=chrome.package --artifacts-dir=chrome_source --filename=linkedin-feed-vanisher-chrome.zip --overwrite-dest",
-    "build:chromium": "npm run build:chrome"
+    "clean": "rm -rf .output .wxt"
   },
   "repository": {
     "type": "git",
@@ -31,8 +26,9 @@
   },
   "homepage": "https://github.com/ajw170/LinkedIn-Feed-Vanisher#readme",
   "devDependencies": {
-    "@types/chrome": "^0.1.24",
-    "@types/firefox-webext-browser": "^120.0.4",
-    "web-ext": "^10.1.0"
+    "@types/webextension-polyfill": "^0.12.5",
+    "typescript": "^6.0.3",
+    "webextension-polyfill": "^0.12.0",
+    "wxt": "^0.20.27"
   }
 }

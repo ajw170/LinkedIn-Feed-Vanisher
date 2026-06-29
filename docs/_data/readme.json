@@ -16,8 +16,9 @@
   ],
   "support_url": "https://www.buymeacoffee.com/codevision",
   "description": [
-    "LinkedIn is a fantastic networking tool — but that **infinite scrolling news feed** is a productivity black hole. Endless posts, humble-brags, and AI-generated \"thought leadership\" can derail your entire afternoon.",
-    "**LinkedIn Feed Vanisher** is a lightweight browser extension that makes the feed _disappear_ with a single click. Use LinkedIn for what it's actually good for — messaging, jobs, profiles — without the distraction of the feed."
+    "LinkedIn Feed Vanisher removes LinkedIn feed UI from the DOM and replaces it with a calm placeholder so you can focus on messaging, jobs, and profiles.",
+    "- 🚫 **Blocks the LinkedIn news feed**\n- 🔕 **Supports a separate notifications-feed toggle**\n- 💾 **Remembers feed preferences** across reloads\n- 🔵 **Toolbar badge** reflects active/inactive blocker state\n- 🌍 **Cross-browser build with WXT** (Manifest V3 baseline)",
+    "---"
   ],
   "comparison": [
     {
@@ -38,41 +39,39 @@
     }
   ],
   "features": [
-    "🚫 **Hides the LinkedIn news feed** on `linkedin.com/feed/` and the home page",
-    "🔘 **One-click toggle** via the browser toolbar popup",
-    "💾 **Remembers your preference** — feed stays hidden across page reloads",
-    "🔵 **Badge indicator** on the toolbar icon shows active/inactive state",
-    "🦊 **Firefox** (Manifest V2) and 🟡 **Chrome/Chromium** (Manifest V3) supported"
+    "🚫 **Blocks the LinkedIn news feed**",
+    "🔕 **Supports a separate notifications-feed toggle**",
+    "💾 **Remembers feed preferences** across reloads",
+    "🔵 **Toolbar badge** reflects active/inactive blocker state",
+    "🌍 **Cross-browser build with WXT** (Manifest V3 baseline)"
   ],
   "installation": [
     {
-      "title": "🟡 Chrome / Chromium / Edge / Brave",
+      "title": "Chrome / Edge / Brave",
       "steps": [
-        "**Download or clone** this repository:",
-        "Run `npm install && npm run sync` to generate the extension package:",
-        "Open Chrome and go to `chrome://extensions/`",
-        "Enable **Developer Mode** (toggle in the top-right corner)",
-        "Click **\"Load unpacked\"**",
-        "Select the **`chrome.package/`** folder from the cloned repository",
-        "The 🌀 icon will appear in your toolbar. Click it to toggle the feed!"
+        "Clone this repository and install dependencies:",
+        "Build the Chrome package:",
+        "Open `chrome://extensions/` (or `edge://extensions/`, `brave://extensions/`)",
+        "Enable **Developer mode**",
+        "Click **Load unpacked**",
+        "Select `.output/chrome-mv3/`"
       ],
       "notes": [
-        "💡 **Edge:** Go to `edge://extensions/` and follow the same steps.",
-        "💡 **Brave:** Go to `brave://extensions/` and follow the same steps."
+        "💡 Use `npm run dev` for watch mode during development."
       ]
     },
     {
-      "title": "🦊 Firefox",
+      "title": "Firefox",
       "steps": [
-        "**Download or clone** this repository:",
-        "Run `npm install && npm run sync` to generate the extension package:",
-        "Open Firefox and go to `about:debugging`",
-        "Click **\"This Firefox\"** in the left sidebar",
-        "Click **\"Load Temporary Add-on…\"**",
-        "Navigate to the **`firefox.package/`** folder and select **`manifest.json`**",
-        "The 🌀 icon will appear in your toolbar!"
+        "Clone this repository and install dependencies:",
+        "Build the Firefox package:",
+        "Open `about:debugging#/runtime/this-firefox`",
+        "Click **Load Temporary Add-on…**",
+        "Select `.output/firefox-mv3/manifest.json`"
       ],
-      "notes": []
+      "notes": [
+        "💡 Use `npm run dev:firefox` for watch mode during development."
+      ]
     }
   ],
   "license": "MIT © [LinkedIn Feed Vanisher Contributors](https://github.com/ajw170/LinkedIn-Feed-Vanisher)"

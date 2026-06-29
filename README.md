@@ -23,9 +23,7 @@
 
 ## 🌐 GitHub Pages microsite
 
-This repository now includes a **Jekyll-powered GitHub Pages microsite** in [`docs/`](docs/), which is designed to act as a lightweight promotional landing page for the extension.
-
-If you want a beginner-friendly technical explanation of how this Jekyll/GitHub Pages/Ruby setup works in this repository, see [JEKYLL.md](JEKYLL.md).
+This repository includes a **Jekyll-powered GitHub Pages microsite** in [`docs/`](docs/).
 
 - GitHub Pages source folder: `docs/`
 - Jekyll config: `docs/_config.yml`
@@ -34,19 +32,20 @@ If you want a beginner-friendly technical explanation of how this Jekyll/GitHub 
   ```bash
   npm run sync:pages
   ```
-- Preview the site locally with Jekyll:
-  ```bash
-  cd docs
-  gem install bundler
-  bundle install
-  bundle exec jekyll serve
-  ```
 
 ## 🎭 What Does It Do?
 
-LinkedIn is a fantastic networking tool — but that **infinite scrolling news feed** is a productivity black hole. Endless posts, humble-brags, and AI-generated "thought leadership" can derail your entire afternoon.
+LinkedIn Feed Vanisher removes LinkedIn feed UI from the DOM and replaces it with a calm placeholder so you can focus on messaging, jobs, and profiles.
 
-**LinkedIn Feed Vanisher** is a lightweight browser extension that makes the feed _disappear_ with a single click. Use LinkedIn for what it's actually good for — messaging, jobs, profiles — without the distraction of the feed.
+### ✨ Features
+
+- 🚫 **Blocks the LinkedIn news feed**
+- 🔕 **Supports a separate notifications-feed toggle**
+- 💾 **Remembers feed preferences** across reloads
+- 🔵 **Toolbar badge** reflects active/inactive blocker state
+- 🌍 **Cross-browser build with WXT** (Manifest V3 baseline)
+
+---
 
 | Before 😩 | After 🎉 |
 |---|---|
@@ -55,279 +54,180 @@ LinkedIn is a fantastic networking tool — but that **infinite scrolling news f
 | Notifications pulling you back in | You're in control of your attention |
 | "Just one more post…" | Get in, do your thing, get out |
 
-### ✨ Features
+---
 
-- 🚫 **Blocks the LinkedIn news feed** with its own popup toggle
-- 🔕 **Supports a separate notifications-feed toggle** (work in progress selectors)
-- 💾 **Remembers your preferences** across page reloads
-- 🔵 **Badge indicator** on the toolbar icon shows active/inactive state
-- 🦊 **Firefox** (Manifest V2) and 🟡 **Chrome/Chromium** (Manifest V3) supported
+## 🧱 Architecture (WXT)
+
+This project now uses **[WXT](https://wxt.dev/)** for cross-browser extension development.
+
+- **Manifest V3 baseline** for all builds
+- **TypeScript** entrypoints
+- **`browser.*` API usage** via `webextension-polyfill` compatibility layer
+- **Browser-specific manifest overrides** in `wxt.config.ts`
+
+### Key directories
+
+```text
+LinkedIn-Feed-Vanisher/
+├── entrypoints/
+│   ├── background.ts          # Background logic (badge, install/init, listeners)
+│   ├── content.ts             # Feed removal/restoration logic
+│   └── popup/
+│       ├── index.html         # Popup markup
+│       ├── main.ts            # Popup state + messaging
+│       └── style.css          # Popup styles
+├── lib/
+│   ├── feed-state.ts          # Shared storage keys/state helpers
+│   └── background.ts          # Shared background helpers
+├── public/
+│   └── icons/                 # Static extension icons copied into build output
+├── wxt.config.ts              # WXT config + manifest overrides
+├── docs/                      # GitHub Pages microsite
+└── scripts/sync-pages-data.js # README → docs/_data/readme.json sync
+```
 
 ---
 
-## 📁 Repository Structure
+## ⚙️ Setup
 
-```
-LinkedIn-Feed-Vanisher/
-├── shared/                        # Shared source files (browser-agnostic)
-│   ├── content.shared.js          # Shared content-script logic
-│   ├── popup.shared.js            # Shared popup constants + UI helpers
-│   ├── background.shared.js       # Shared background constants + helpers
-│   ├── popup.html                 # Popup HTML (identical for all browsers)
-│   ├── popup.css                  # Popup stylesheet — single source for all colors/styles
-│   └── icons/                     # Extension icons (PNG, identical for all browsers)
-│       ├── icon16.png / icon16-dim.png
-│       ├── icon48.png / icon48-dim.png
-│       └── icon128.png / icon128-dim.png
-│
-├── chrome_source/                 # Chrome / Chromium source files (Manifest V3)
-│   ├── manifest.json              # Extension manifest
-│   ├── jsconfig.json              # TypeScript/JS config
-│   ├── content.chrome.js          # Chrome-specific content-script additions
-│   ├── popup.chrome.js            # Chrome-specific popup additions
-│   └── background.chrome.js       # Chrome-specific background additions
-│
-├── firefox_source/                # Firefox source files (Manifest V2)
-│   ├── manifest.json              # Extension manifest
-│   ├── jsconfig.json              # TypeScript/JS config
-│   ├── content.firefox.js         # Firefox-specific content-script additions
-│   ├── popup.firefox.js           # Firefox-specific popup additions
-│   └── background.firefox.js      # Firefox-specific background additions
-│
-├── chrome.package/                # ⚙️ Generated — Chrome extension ready for loading/packing
-│   ├── manifest.json, content.js, popup.js, background.js
-│   ├── popup.html, popup.css
-│   └── icons/
-│
-├── firefox.package/               # ⚙️ Generated — Firefox extension ready for loading/packing
-│   ├── manifest.json, content.js, popup.js, background.js
-│   ├── popup.html, popup.css
-│   └── icons/
-│
-├── scripts/
-│   ├── sync-content-shared.js     # Generates package folders from shared + source files
-│   ├── sync-pages-data.js         # Generates Jekyll microsite data from README.md
-│   └── clean-packages.js          # Removes all generated files from package folders
-│
-├── docs/                          # GitHub Pages / Jekyll microsite source
-│   ├── _config.yml                # Jekyll configuration for GitHub Pages
-│   ├── _data/readme.json          # README-derived microsite data
-│   ├── _layouts/default.html      # Microsite layout
-│   ├── assets/site.css            # Microsite stylesheet
-│   ├── Gemfile                    # Local Jekyll preview dependencies
-│   └── index.html                 # Microsite landing page
-│
-├── DESIGN.md                      # Color palette, styling conventions, and design system
-└── README.md
-```
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/ajw170/LinkedIn-Feed-Vanisher.git
+   cd LinkedIn-Feed-Vanisher
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-### How the shared/generated structure works
+---
 
-Shared logic lives in `shared/`. Browser-specific code lives in `chrome_source/*.chrome.js` and `firefox_source/*.firefox.js` stub files. The sync script concatenates them into the complete extension files and writes them — together with `manifest.json`, `popup.html`, `popup.css`, and `icons/` — into `chrome.package/` and `firefox.package/`. Those package folders contain **only** the files needed to load or build the extension.
+## 🧪 Build, run, and package
 
-**Styling** is controlled entirely by `shared/popup.css`, which uses CSS custom properties so that every color can be changed from a single place. See [DESIGN.md](DESIGN.md) for the full color palette and styling conventions.
+### Development
 
-To regenerate the package folders after editing shared or stub files:
+- Chrome/Chromium dev mode:
+  ```bash
+  npm run dev
+  ```
+- Firefox dev mode:
+  ```bash
+  npm run dev:firefox
+  ```
+
+WXT rebuilds on changes and writes output to `.output/`.
+
+### Type-check
+
 ```bash
-npm run sync
+npm run typecheck
 ```
 
-To remove all generated files from the package folders:
+### Production builds
+
+- Chrome build:
+  ```bash
+  npm run build:chrome
+  ```
+  Output folder: `.output/chrome-mv3/`
+
+- Firefox build:
+  ```bash
+  npm run build:firefox
+  ```
+  Output folder: `.output/firefox-mv3/`
+
+### Zip packages for release/deploy
+
+- All targets:
+  ```bash
+  npm run zip
+  ```
+- Chrome only:
+  ```bash
+  npm run zip:chrome
+  ```
+- Firefox only:
+  ```bash
+  npm run zip:firefox
+  ```
+
+Zip artifacts are emitted by WXT under `.output/`.
+
+### Clean build output
+
 ```bash
 npm run clean
 ```
-
-To refresh the GitHub Pages microsite data after editing `README.md`:
-```bash
-npm run sync:pages
-```
-
-> **Note:** `chrome.package/` and `firefox.package/` are generated artifacts and are listed in `.gitignore`. Run `npm run sync` to recreate them at any time.
-
-The only files that require manual maintenance per-browser are `manifest.json`, `jsconfig.json`, and the `*.chrome.js` / `*.firefox.js` stubs in `chrome_source/` and `firefox_source/`.
 
 ---
 
 ## 🚀 Installation
 
-### 🟡 Chrome / Chromium / Edge / Brave
+### Chrome / Edge / Brave
 
-1. **Download or clone** this repository:
+1. Clone this repository and install dependencies:
    ```bash
    git clone https://github.com/ajw170/LinkedIn-Feed-Vanisher.git
-   ```
-2. Run `npm install && npm run sync` to generate the extension package:
-   ```bash
-   npm install
-   npm run sync
-   ```
-3. Open Chrome and go to `chrome://extensions/`
-4. Enable **Developer Mode** (toggle in the top-right corner)
-5. Click **"Load unpacked"**
-6. Select the **`chrome.package/`** folder from the cloned repository
-7. The 🌀 icon will appear in your toolbar. Click it to toggle the feed!
-
-> 💡 **Edge:** Go to `edge://extensions/` and follow the same steps.
-> 💡 **Brave:** Go to `brave://extensions/` and follow the same steps.
-
----
-
-### 🦊 Firefox
-
-1. **Download or clone** this repository:
-   ```bash
-   git clone https://github.com/ajw170/LinkedIn-Feed-Vanisher.git
-   ```
-
-2. Run `npm install && npm run sync` to generate the extension package:
-   ```bash
-   npm install
-   npm run sync
-   ```
-
-3. Open Firefox and go to `about:debugging`
-4. Click **"This Firefox"** in the left sidebar
-5. Click **"Load Temporary Add-on…"**
-6. Navigate to the **`firefox.package/`** folder and select **`manifest.json`**
-7. The 🌀 icon will appear in your toolbar!
-
-## 🖥️ Running & Editing in an IDE
-
-### Recommended: VS Code
-
-This project works great with [Visual Studio Code](https://code.visualstudio.com/).
-
-1. **Open the project:**
-   ```bash
-   code LinkedIn-Feed-Vanisher/
-   ```
-   Or open the folder via **File → Open Folder…**
-
-2. **Recommended extensions** (install from the Extensions panel `Ctrl+Shift+X`):
-   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) — JavaScript linting
-   - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) — code formatting
-   - [Browser Preview](https://marketplace.visualstudio.com/items?itemName=auchenberg.vscode-browser-preview) — preview HTML popup files
-
-3. **Edit files** in `chrome_source/` or `firefox_source/` depending on your target browser.
-
-4. **Live-reload during development:**
-
-   First, install dependencies (one-time):
-   ```bash
+   cd LinkedIn-Feed-Vanisher
    npm install
    ```
-
-   Then use one of these npm scripts:
-
-   | Command | Browser | Watch Mode | Purpose |
-   |---------|---------|-----------|---------|
-   | `npm run sync` | — | — | Regenerate package folders from shared + source files (runs automatically before the commands below) |
-   | `npm run sync:pages` | — | — | Regenerate `docs/_data/readme.json` for the GitHub Pages microsite |
-   | `npm run clean` | — | — | Remove all generated files from `chrome.package/` and `firefox.package/` |
-   | `npm run firefox` | Firefox | ✅ Yes | Sync + launch Firefox with default auto-reload behavior |
-   | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with default auto-reload behavior |
-   | `npm run firefox:run` | Firefox | ❌ No | Sync + one-time Firefox launch (`--no-reload`) |
-   | `npm run chrome:run` | Chromium | ❌ No | Sync + one-time Chromium launch (`--no-reload`) |
-   | `npm run build:firefox` | Firefox | — | Sync + build package zip to `firefox_source/linkedin-feed-vanisher-firefox.zip` |
-   | `npm run build:chrome` | Chromium | — | Sync + build package zip to `chrome_source/linkedin-feed-vanisher-chrome.zip` |
-   | `npm run build:chromium` | Chromium | — | Alias of `npm run build:chrome` |
-
-   **Example:**
+2. Build the Chrome package:
    ```bash
-   npm run firefox    # Launches Firefox with auto-reload enabled
-   npm run chrome     # Launches Chrome with auto-reload enabled
-   npm run build:firefox
    npm run build:chrome
    ```
+3. Open `chrome://extensions/` (or `edge://extensions/`, `brave://extensions/`)
+4. Enable **Developer mode**
+5. Click **Load unpacked**
+6. Select `.output/chrome-mv3/`
+> 💡 Use `npm run dev` for watch mode during development.
 
-   **Notes:**
-   - Auto-reload is enabled by default for `npm run firefox` and `npm run chrome`.
-   - Use `npm run firefox:run` / `npm run chrome:run` when you want one-time launch without reload.
-   - If `web-ext` can't find your browser automatically, you can pass an explicit binary path. See the [web-ext documentation](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/#web-ext-run) for details.
-   - If you prefer to use your existing profile instead of a temporary one, you can still do manual reloads:
-     - **Chrome:** Go to `chrome://extensions/` and click the 🔄 refresh button on the extension card.
-     - **Firefox:** Go to `about:debugging` and click **Reload** on the extension entry.
+### Firefox
 
-   **Manual reload (works everywhere)**
-   - **Chrome:** After editing, go to `chrome://extensions/` and click the 🔄 refresh button on the extension card.
-   - **Firefox (about:debugging):** Click **Reload** on the extension entry.
-
-5. **Inspect the popup:**
-   - Right-click the extension toolbar icon → **"Inspect Popup"** (Chrome) or **"Inspect"** (Firefox)
-   - This opens DevTools scoped to the popup window.
-
-6. **Inspect the content script:**
-   - Open `linkedin.com/feed/` in your browser
-   - Open DevTools (`F12`) → **Console**
-   - The content script runs in the page context; log statements appear here.
-
-### WebStorm / IntelliJ IDEA
-
-1. Open the project folder: **File → Open…**
-2. Mark `chrome/` and `firefox/` as source roots if needed
-3. Use the built-in terminal to run `npm run firefox` (Firefox auto-reload), `npm run chrome` (Chromium auto-reload), or the `:run` variants for one-time launch.
+1. Clone this repository and install dependencies:
+   ```bash
+   git clone https://github.com/ajw170/LinkedIn-Feed-Vanisher.git
+   cd LinkedIn-Feed-Vanisher
+   npm install
+   ```
+2. Build the Firefox package:
+   ```bash
+   npm run build:firefox
+   ```
+3. Open `about:debugging#/runtime/this-firefox`
+4. Click **Load Temporary Add-on…**
+5. Select `.output/firefox-mv3/manifest.json`
+> 💡 Use `npm run dev:firefox` for watch mode during development.
 
 ---
 
-## 🛠️ How It Works
+## 🔧 Customization
 
-```
-┌──────────────┐   toggle click   ┌───────────────┐   sendMessage   ┌─────────────────┐
-│  popup.html  │ ───────────────► │   popup.js    │ ──────────────► │  content.js     │
-│  (toolbar)   │                  │  (reads/saves │                  │ (removes feed   │
-└──────────────┘                  │   storage)    │                  │  and inserts a  │
-                                  └───────────────┘                  │  placeholder)   │
-                                                                      └─────────────────┘
-                                         │
-                                         ▼ sendMessage
-                                  ┌───────────────┐
-                                  │ background.js │
-                                  │ (updates badge│
-                                  │  on toolbar)  │
-                                  └───────────────┘
-```
+To update selectors, edit `entrypoints/content.ts`:
 
-1. **`content.js`** is injected into every `linkedin.com` page. It reads `feedPreferences` from extension storage and applies two independent blockers: one for news feed, one for notifications feed.
-2. **`popup.js`** renders two toggle switches. When either changes, it saves the full feed-preference state and notifies the active tab's content script to apply it immediately.
-3. **`background.js`** listens for state-change events and updates the badge text on the toolbar icon whenever one or more feed blockers are active.
+- `NEWS_FEED_SELECTORS`
+- `NOTIFICATIONS_FEED_SELECTORS`
 
----
-
-## 🔧 Customisation
-
-Want to hide (or show) additional LinkedIn elements? Open `shared/content.shared.js` and add CSS selectors to `NEWS_FEED_SELECTORS` or `NOTIFICATIONS_FEED_SELECTORS`, then run `npm run sync` to regenerate the package folders:
-
-```js
-const NEWS_FEED_SELECTORS = [
-  '.scaffold-finite-scroll__content',  // main feed container
-  '[data-finite-scroll-hotkey-context="FEED"]',
-  '.feed-following-feed',
-  '.news-module',                      // "LinkedIn News" sidebar widget
-  // ✏️ Add your own selectors here!
-];
-
-const NOTIFICATIONS_FEED_SELECTORS = [
-  // WIP: add and refine selectors for LinkedIn notifications pages/cards.
-];
-```
-
-Use your browser's DevTools Inspector to find the right class names — LinkedIn updates them occasionally.
+Use browser DevTools to inspect current LinkedIn DOM selectors.
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome! 🎉
+Pull requests are welcome.
 
-1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/my-awesome-feature`
-3. Commit your changes: `git commit -m 'feat: add my awesome feature'`
-4. Push the branch: `git push origin feature/my-awesome-feature`
-5. Open a Pull Request
+For extension changes:
 
-Please keep the shared sources (`shared/`) updated for logic that applies to both browsers. Only put browser-specific code in the `*.chrome.js` / `*.firefox.js` stubs inside `chrome_source/` and `firefox_source/`. Run `npm run sync` after any changes to regenerate the package folders.
+1. Edit TypeScript in `entrypoints/` or shared utilities in `lib/`
+2. Run `npm run typecheck`
+3. Build the target browser (`npm run build:chrome` and/or `npm run build:firefox`)
+4. Verify manually in browser
 
-For styling changes, consult [DESIGN.md](DESIGN.md) and update the CSS custom properties in `shared/popup.css` rather than adding hard-coded color values.
+If `README.md` changes affect the microsite content, run:
+
+```bash
+npm run sync:pages
+```
 
 ---
 

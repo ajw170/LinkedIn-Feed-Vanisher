@@ -1,5 +1,7 @@
-﻿.idea/
+.idea/
 node_modules/
+.output/
+.wxt/
 chrome.package/
 firefox.package/
 docs/.bundle/
