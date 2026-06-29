@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Feed Vanisher</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">🚫</div>
+    <div class="header-text">
+      <h1>LinkedIn Feed Vanisher</h1>
+      <p>Stay focused on what matters</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span>Block news feed</span>
+        <span>Remove LinkedIn's main feed timeline</span>
+      </div>
+      <label class="switch" aria-label="Toggle news feed blocking">
+        <input type="checkbox" id="newsToggle" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span>Block notifications feed</span>
+        <span>WIP: selectors will be refined over time</span>
+      </div>
+      <label class="switch" aria-label="Toggle notifications feed blocking">
+        <input type="checkbox" id="notificationsToggle" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="status-badge vanished" id="statusBadge">
+      <div class="dot"></div>
+      <span id="statusText">Blocking one or more feeds</span>
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://github.com/ajw170/LinkedIn-Feed-Vanisher" target="_blank" rel="noreferrer">
+      View on GitHub
+    </a>
+  </footer>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

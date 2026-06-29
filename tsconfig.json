@@ -1,0 +1,7 @@
+{
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    "strict": true
+  },
+  "include": ["entrypoints/**/*.ts", "lib/**/*.ts", "wxt.config.ts"]
+}
