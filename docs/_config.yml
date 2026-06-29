@@ -1,0 +1,7 @@
+title: LinkedIn Feed Vanisher
+description: Promotional microsite for the LinkedIn Feed Vanisher browser extension.
+url: https://ajw170.github.io
+baseurl: /LinkedIn-Feed-Vanisher
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag

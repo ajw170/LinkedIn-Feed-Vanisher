@@ -1,0 +1,102 @@
+---
+layout: default
+title: Focus on LinkedIn, not the feed
+---
+{% assign readme = site.data.readme %}
+<main class="page-shell">
+  <section class="hero">
+    {% if readme.warning %}
+      <p class="eyebrow">{{ readme.warning }}</p>
+    {% endif %}
+
+    <h1>{{ readme.title }}</h1>
+    <p class="tagline">{{ readme.tagline }}</p>
+
+    <div class="hero-copy">
+      {% for paragraph in readme.description %}
+        {{ paragraph | markdownify }}
+      {% endfor %}
+    </div>
+
+    <div class="cta-group">
+      {% for link in readme.install_links %}
+        <a class="button{% if forloop.first %} primary{% endif %}" href="{{ link.url }}">{{ link.label }}</a>
+      {% endfor %}
+      <a class="button secondary" href="{{ readme.readme_url }}">Read the full README</a>
+      <a class="button secondary" href="{{ readme.repository_url }}">View source on GitHub</a>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading">
+      <h2>Why use it?</h2>
+      <p>Hide the scroll trap, keep messaging and jobs accessible, and get in and out of LinkedIn with your attention intact.</p>
+    </div>
+
+    <div class="comparison-grid">
+      {% for row in readme.comparison %}
+        <article class="comparison-card">
+          <p class="comparison-label">Before</p>
+          <h3>{{ row.before }}</h3>
+          <p class="comparison-label after">After</p>
+          <p class="comparison-after">{{ row.after }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading">
+      <h2>Feature highlights</h2>
+      <p>Small, direct, and built to stay out of your way.</p>
+    </div>
+
+    <div class="feature-grid">
+      {% for feature in readme.features %}
+        <article class="feature-card">
+          <div class="feature-copy">{{ feature | markdownify }}</div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading">
+      <h2>Install it your way</h2>
+      <p>Use the store links above or follow the manual setup summary below.</p>
+    </div>
+
+    <div class="install-grid">
+      {% for entry in readme.installation %}
+        <article class="install-card">
+          <h3>{{ entry.title }}</h3>
+          <ol>
+            {% for step in entry.steps %}
+              <li>{{ step | markdownify }}</li>
+            {% endfor %}
+          </ol>
+          {% if entry.notes.size > 0 %}
+            <ul class="install-notes">
+              {% for note in entry.notes %}
+                <li>{{ note | markdownify }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel footer-panel">
+    <div>
+      <h2>Open source, focused, and maintained in public</h2>
+      <p>Need the full development workflow, architecture notes, or customization guide? The repository README still has the long-form version.</p>
+      <p class="implementation-note">This landing page is rendered from README-derived data so the site content stays aligned with the repository documentation.</p>
+    </div>
+    <div class="footer-actions">
+      <a class="button primary" href="{{ readme.readme_url }}">Open README</a>
+      <a class="button secondary" href="{{ readme.support_url }}">Support the project</a>
+    </div>
+    <p class="license">{{ readme.license }}</p>
+  </section>
+</main>

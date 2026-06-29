@@ -21,6 +21,27 @@
 ## 💗 Support
 <a href="https://www.buymeacoffee.com/codevision" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me a Coffee" style="height: 50px !important;width: 180px !important;" ></a>
 
+## 🌐 GitHub Pages microsite
+
+This repository now includes a **Jekyll-powered GitHub Pages microsite** in [`docs/`](docs/), which is designed to act as a lightweight promotional landing page for the extension.
+
+If you want a beginner-friendly technical explanation of how this Jekyll/GitHub Pages/Ruby setup works in this repository, see [JEKYLL.md](JEKYLL.md).
+
+- GitHub Pages source folder: `docs/`
+- Jekyll config: `docs/_config.yml`
+- README-derived site data: `docs/_data/readme.json`
+- Refresh the site data from `README.md`:
+  ```bash
+  npm run sync:pages
+  ```
+- Preview the site locally with Jekyll:
+  ```bash
+  cd docs
+  gem install bundler
+  bundle install
+  bundle exec jekyll serve
+  ```
+
 ## 🎭 What Does It Do?
 
 LinkedIn is a fantastic networking tool — but that **infinite scrolling news feed** is a productivity black hole. Endless posts, humble-brags, and AI-generated "thought leadership" can derail your entire afternoon.
@@ -85,7 +106,16 @@ LinkedIn-Feed-Vanisher/
 │
 ├── scripts/
 │   ├── sync-content-shared.js     # Generates package folders from shared + source files
+│   ├── sync-pages-data.js         # Generates Jekyll microsite data from README.md
 │   └── clean-packages.js          # Removes all generated files from package folders
+│
+├── docs/                          # GitHub Pages / Jekyll microsite source
+│   ├── _config.yml                # Jekyll configuration for GitHub Pages
+│   ├── _data/readme.json          # README-derived microsite data
+│   ├── _layouts/default.html      # Microsite layout
+│   ├── assets/site.css            # Microsite stylesheet
+│   ├── Gemfile                    # Local Jekyll preview dependencies
+│   └── index.html                 # Microsite landing page
 │
 ├── DESIGN.md                      # Color palette, styling conventions, and design system
 └── README.md
@@ -105,6 +135,11 @@ npm run sync
 To remove all generated files from the package folders:
 ```bash
 npm run clean
+```
+
+To refresh the GitHub Pages microsite data after editing `README.md`:
+```bash
+npm run sync:pages
 ```
 
 > **Note:** `chrome.package/` and `firefox.package/` are generated artifacts and are listed in `.gitignore`. Run `npm run sync` to recreate them at any time.
@@ -187,6 +222,7 @@ This project works great with [Visual Studio Code](https://code.visualstudio.com
    | Command | Browser | Watch Mode | Purpose |
    |---------|---------|-----------|---------|
    | `npm run sync` | — | — | Regenerate package folders from shared + source files (runs automatically before the commands below) |
+   | `npm run sync:pages` | — | — | Regenerate `docs/_data/readme.json` for the GitHub Pages microsite |
    | `npm run clean` | — | — | Remove all generated files from `chrome.package/` and `firefox.package/` |
    | `npm run firefox` | Firefox | ✅ Yes | Sync + launch Firefox with default auto-reload behavior |
    | `npm run chrome` | Chromium | ✅ Yes | Sync + launch Chrome/Edge/Brave with default auto-reload behavior |
